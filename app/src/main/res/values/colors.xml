@@ -4,9 +4,17 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="keyboardBackground">#34495E</color>
-    <color name="keyboardDivider">#2C3E50</color>
+    <color name="keyboardBackground">#000000</color>
+    <color name="keyboardDivider">#ffffff</color>
     <color name="keyboardPressed">#95A5A6</color>
     <color name="keyboardText">#000000</color>
     <color name="keyboardPreview">#5D5D5D</color>
+    <color name="Dark_purple">#B9AEE7</color>
+    <color name="Light_purple">#E5C1EA</color>
+    <color name="Mint">#9EF0DD</color>
+    <color name="white">#ffffff</color>
+    <color name="sunday">#ff0000</color>
+    <color name="saturday">#0000ff</color>
+    <color name="weekday">#212121</color>
+
 </resources>
