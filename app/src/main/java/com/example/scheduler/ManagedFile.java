@@ -189,4 +189,37 @@ public class ManagedFile {
 
         return result;
     }
+
+    //파일 업데이트 시에 사용되는 함수
+    private boolean writeData(String date, ArrayList<String[]> data) {
+        boolean result = true;
+        String[] temp;
+
+        deleteFile(date);
+        for (int i = 0; result && i < data.size(); i++) {
+            temp = new String[3];
+            for (int j = 0; j < 3; j++) {
+                temp[j] = data.get(i)[j];
+            }
+
+            result = writeData(date, temp);
+        }
+
+        return result;
+    }
+
+    public boolean updateData(String date, String[] data, int index) {
+        boolean result;
+        ArrayList<String[]> totalData = new ArrayList<>(readFile(date));
+
+        if (index >= totalData.size()) {
+            result = false;
+        }
+        else {
+            totalData.set(index, data);
+            result = writeData(date, totalData);
+        }
+
+        return result;
+    }
 }
