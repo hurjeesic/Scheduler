@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff" >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,12 +13,12 @@
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="408dp"
-            android:layout_height="132dp"
+            android:layout_height="120dp"
             android:background="@color/Mint"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="380dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
                 <Button
@@ -71,18 +73,17 @@
             android:layout_height="wrap_content"
             android:paddingLeft="70dp"
             android:paddingRight="60dp"
-            android:paddingTop="40dp"
+            android:paddingTop="20dp"
             android:orientation="vertical">
-                <RelativeLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="M"
                     android:textSize="80px"
-                    android:id="@+id/month"
+                    android:id="@+id/Month"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentBottom="true"
                     />
@@ -90,77 +91,80 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="year"
+                    android:id="@+id/Year"
                     android:textSize="40px"
                     android:layout_alignParentRight="true"/>
             </RelativeLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/week"
-                    android:paddingTop="20dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="일"
-                        android:textSize="60px"
 
-                        android:textColor="@color/sunday"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="월"
-                        android:textSize="60px"
-                        android:textColor="@color/weekday"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="화"
-                        android:textSize="60px"
-                        android:textColor="@color/weekday"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="수"
-                        android:textSize="60px"
-                        android:textColor="@color/weekday"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="목"
-                        android:textSize="60px"
-                        android:textColor="@color/weekday"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="금"
-                        android:textSize="60px"
-                        android:textColor="@color/weekday"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="토"
-                        android:textSize="60px"
-                        android:textColor="@color/saturday"/>
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/week"-->
+            <!--android:paddingTop="10dp"-->
+            <!--android:orientation="horizontal">-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="일"-->
+            <!--android:textSize="60px"-->
 
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
+            <!--android:textColor="@color/sunday"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="월"-->
+            <!--android:textSize="60px"-->
+            <!--android:textColor="@color/weekday"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="화"-->
+            <!--android:textSize="60px"-->
+            <!--android:textColor="@color/weekday"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="수"-->
+            <!--android:textSize="60px"-->
+            <!--android:textColor="@color/weekday"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="목"-->
+            <!--android:textSize="60px"-->
+            <!--android:textColor="@color/weekday"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="금"-->
+            <!--android:textSize="60px"-->
+            <!--android:textColor="@color/weekday"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="토"-->
+            <!--android:textSize="60px"-->
+            <!--android:textColor="@color/saturday"/>-->
+
+            <!--</LinearLayout>-->
+
+            <GridView
+                android:layout_marginTop="5dp"
+                android:id="@+id/gridview"
+                android:layout_weight="1"
+                android:layout_height="0dp"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:paddingTop="20dp"
-                ></LinearLayout>
+                android:numColumns="7"
+                android:listSelector="#a2a2ff"
+                >
+            </GridView>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -173,11 +177,9 @@
                     android:id="@+id/add"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_alignEnd="@+id/month"
                     android:layout_alignParentStart="true"
 
                     android:layout_alignParentLeft="true"
-                    android:layout_marginEnd="-53dp"
                     android:background="@drawable/plus" />
                 <Button
                     android:layout_width="50dp"
@@ -187,5 +189,4 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
