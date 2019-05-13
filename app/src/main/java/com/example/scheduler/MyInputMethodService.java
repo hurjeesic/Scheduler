@@ -9,6 +9,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
+// Service 객체를 이용한 custom keyboard 제작
+// https://github.com/ghrud92/android-custom-keyboard-example
 public class MyInputMethodService extends InputMethodService implements KeyboardView.OnKeyboardActionListener{
     private KeyboardView keyboardView;
     private Keyboard keyboard;

@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+// Grid View를 이용한 달력 제작
+// https://heum-story.tistory.com/6
 public class CalendarActivity extends Activity {
     /**
      * 연/월 텍스트뷰
@@ -130,7 +132,8 @@ public class CalendarActivity extends Activity {
                 holder = new ViewHolder();
                 holder.tvItemGridView = (TextView)convertView.findViewById(R.id.tv_item_gridview);
                 convertView.setTag(holder);
-            } else {
+            }
+            else {
                 holder = (ViewHolder)convertView.getTag();
             }
             holder.tvItemGridView.setText("" + getItem(position));
@@ -140,7 +143,7 @@ public class CalendarActivity extends Activity {
             Integer today = mCal.get(Calendar.DAY_OF_MONTH);
             String sToday = String.valueOf(today);
             if (sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
-                holder.tvItemGridView.setTextColor(getResources().getColor(R.color.color_000000));
+                holder.tvItemGridView.setTextColor(getResources().getColor(R.color.black));
             }
 
             return convertView;
