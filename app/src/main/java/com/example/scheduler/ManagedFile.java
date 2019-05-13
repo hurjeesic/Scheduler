@@ -113,6 +113,21 @@ public class ManagedFile {
         return result;
     }
 
+    public void deleteFile(String date) {
+        File f = null;
+
+        try {
+            f = new File(FILE_PATH, date);
+
+            if (f.exists()) {
+                f.delete();
+            }
+        }
+        catch (Exception e) {
+            Log.e("예외", "알 수 없는 예외");
+        }
+    }
+
     //파일에 내용을 추가하는 함수
     public boolean writeData(String date, String[] data) {
         boolean result = true;
