@@ -52,33 +52,56 @@ public class CalendarActivity extends Activity {
         Month = (TextView)findViewById(R.id.Month);
         Year = (TextView)findViewById(R.id.Year);
         gridView = (GridView)findViewById(R.id.gridview);
+        dayList = new ArrayList<>();
+
         // 오늘에 날짜를 세팅 해준다.
         long now = System.currentTimeMillis();
-        final Date date = new Date(now);
+        Date date = new Date(now);
+
         //연,월,일을 따로 저장
         final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
         final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
         final SimpleDateFormat curDayFormat = new SimpleDateFormat("dd", Locale.KOREA);
-        //현재 날짜 텍스트뷰에 뿌려줌
-        Month.setText(curMonthFormat.format(date));
-        Year.setText(curYearFormat.format(date));
-        dayList = new ArrayList<String>();
-        dayList.add("일");
-        dayList.add("월");
-        dayList.add("화");
-        dayList.add("수");
-        dayList.add("목");
-        dayList.add("금");
-        dayList.add("토");
+
         mCal = Calendar.getInstance();
         //이번달 1일 무슨요일인지 판단 mCal.set(Year,Month,Day)
         mCal.set(Integer.parseInt(curYearFormat.format(date)), Integer.parseInt(curMonthFormat.format(date)) - 1, 1);
+
+        resetCalendar();
+    }
+
+    private void addMonth() {
+        mCal.set(Calendar.MONTH, mCal.get(Calendar.MONTH) + 1);
+        resetCalendar();
+    }
+
+    private void divideMonth() {
+        mCal.set(Calendar.MONTH, mCal.get(Calendar.MONTH) - 1);
+        resetCalendar();
+    }
+
+    private void resetCalendar() {
+        dayList.clear();
+//        dayList.add("일");
+//        dayList.add("월");
+//        dayList.add("화");
+//        dayList.add("수");
+//        dayList.add("목");
+//        dayList.add("금");
+//        dayList.add("토");
+
+        //현재 날짜 텍스트뷰에 뿌려줌
+        Month.setText(Integer.toString(mCal.get(Calendar.MONTH) + 1));
+        Year.setText(Integer.toString(mCal.get(Calendar.YEAR)));
+
         int dayNum = mCal.get(Calendar.DAY_OF_WEEK);
         //1일 - 요일 매칭 시키기 위해 공백 add
         for (int i = 1; i < dayNum; i++) {
             dayList.add("");
         }
+
         setCalendarDate(mCal.get(Calendar.MONTH) + 1);
+
         gridAdapter = new GridAdapter(getApplicationContext(), dayList);
         gridView.setAdapter(gridAdapter);
     }
@@ -142,8 +165,15 @@ public class CalendarActivity extends Activity {
             //오늘 day 가져옴
             Integer today = mCal.get(Calendar.DAY_OF_MONTH);
             String sToday = String.valueOf(today);
-            if (sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
+            if (System.currentTimeMillis() == mCal.getTimeInMillis() && sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
                 holder.tvItemGridView.setTextColor(getResources().getColor(R.color.black));
+            }
+
+            if (position % 7 == 0) {
+                holder.tvItemGridView.setTextColor(getResources().getColor(R.color.sunday));
+            }
+            else if (position % 7 == 6) {
+                holder.tvItemGridView.setTextColor(getResources().getColor(R.color.saturday));
             }
 
             return convertView;
