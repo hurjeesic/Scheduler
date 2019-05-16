@@ -19,7 +19,7 @@
     <color name="white">#ffffff</color>
     <color name="sunday">#ff0000</color>
     <color name="saturday">#0000ff</color>
-    <color name="weekday">#212121</color>
+    <color name="weekday">#313131</color>
 
     <color name="black">#000000</color>
 </resources>

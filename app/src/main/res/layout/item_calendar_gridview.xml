@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center">
-    <TextView
+    <Button
         android:gravity="center_horizontal"
         android:id="@+id/tv_item_gridview"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:textSize="40px"
+        style="?android:attr/borderlessButtonStyle"
         />
 </LinearLayout>

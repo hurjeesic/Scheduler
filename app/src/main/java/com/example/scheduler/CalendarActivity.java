@@ -82,13 +82,13 @@ public class CalendarActivity extends Activity {
 
     private void resetCalendar() {
         dayList.clear();
-//        dayList.add("일");
-//        dayList.add("월");
-//        dayList.add("화");
-//        dayList.add("수");
-//        dayList.add("목");
-//        dayList.add("금");
-//        dayList.add("토");
+        dayList.add("일");
+        dayList.add("월");
+        dayList.add("화");
+        dayList.add("수");
+        dayList.add("목");
+        dayList.add("금");
+        dayList.add("토");
 
         //현재 날짜 텍스트뷰에 뿌려줌
         Month.setText(Integer.toString(mCal.get(Calendar.MONTH) + 1));
@@ -175,7 +175,9 @@ public class CalendarActivity extends Activity {
             else if (position % 7 == 6) {
                 holder.tvItemGridView.setTextColor(getResources().getColor(R.color.saturday));
             }
-
+            else{
+                holder.tvItemGridView.setTextColor(getResources().getColor(R.color.weekday));
+            }
             return convertView;
         }
     }

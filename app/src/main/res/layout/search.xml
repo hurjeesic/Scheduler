@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@color/Mint"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="380dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="0.50"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/Light_purple"
+                    android:text="달"
+                    android:textSize="55px" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="0.50"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/Dark_purple"
+                    android:text="일정"
+                    android:textSize="55px" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="380dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:padding="10dp">
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.88"
+                    android:background="@color/white"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="검색" >
+                </EditText>
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.12"
+                    android:background="@drawable/magnifying_glass"
+                    android:layout_gravity="top"/>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                ></ListView>
+
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            >
+
+            <Button
+                android:id="@+id/add"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="70dp"
+                android:layout_alignParentStart="true"
+
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/plus" />
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="70dp"
+                android:background="@drawable/minus"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
