@@ -5,28 +5,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffffff" >
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:layout_height="610dp"
+        android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="100dp"
             android:background="@color/Mint"
             android:orientation="vertical">
+
             <LinearLayout
-                android:layout_width="380dp"
-                android:layout_height="60dp"
+                android:layout_width="390dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
+
                 <Button
                     android:id="@+id/button"
                     android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_weight="0.50"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_weight="0.50"
                     android:background="@color/Light_purple"
                     android:text="달"
                     android:textSize="55px" />
@@ -34,19 +37,21 @@
                 <Button
                     android:id="@+id/button2"
                     android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_weight="0.50"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_weight="0.50"
                     android:background="@color/Dark_purple"
                     android:text="일정"
                     android:textSize="55px" />
 
             </LinearLayout>
+
             <LinearLayout
-                android:layout_width="380dp"
+                android:layout_width="400dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:padding="10dp">
+                android:padding="5dp">
+
                 <EditText
                     android:id="@+id/editText"
                     android:layout_width="0dp"
@@ -55,146 +60,146 @@
                     android:background="@color/white"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:text="검색" >
-                </EditText>
+                    android:text="검색"></EditText>
+
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_gravity="top"
                     android:layout_weight="0.12"
-                    android:background="@drawable/magnifying_glass"
-                    android:layout_gravity="top"/>
+                    android:background="@drawable/magnifying_glass" />
             </LinearLayout>
 
 
-
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="500dp"
             android:orientation="horizontal">
+
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="30dp"
                 android:layout_height="50dp"
-                android:background="@drawable/move_left"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:background="@drawable/move_left" />
+
             <LinearLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
+                android:layout_gravity="center_horizontal"
                 android:orientation="vertical"
-                android:layout_gravity="center_horizontal">
+                android:paddingTop="10dp">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_alignParentStart="true"
                     android:orientation="horizontal">
+
                     <TextView
+                        android:id="@+id/Month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="80px"
-                        android:id="@+id/Month"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentBottom="true"
-                        />
+                        android:textSize="80px" />
+
+                    <TextView
+                        android:id="@+id/Year"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textSize="40px" />
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/week"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/Year"
-                        android:textSize="40px"
-                        android:layout_alignParentRight="true"/>
-                </RelativeLayout>
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="일"
+                        android:textColor="@color/sunday"
+                        android:textSize="50px" />
 
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id="@+id/week"-->
-                    <!--android:paddingTop="10dp"-->
-                    <!--android:orientation="horizontal">-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="월"
+                        android:textColor="@color/weekday"
+                        android:textSize="50px" />
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="일"-->
-                        <!--android:textColor="@color/sunday"-->
-                        <!--android:textSize="60px" />-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="화"
+                        android:textColor="@color/weekday"
+                        android:textSize="50px" />
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="월"-->
-                        <!--android:textColor="@color/weekday"-->
-                        <!--android:textSize="60px" />-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="수"
+                        android:textColor="@color/weekday"
+                        android:textSize="50px" />
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="화"-->
-                        <!--android:textColor="@color/weekday"-->
-                        <!--android:textSize="60px" />-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="목"
+                        android:textColor="@color/weekday"
+                        android:textSize="50px" />
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="수"-->
-                        <!--android:textColor="@color/weekday"-->
-                        <!--android:textSize="60px" />-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="금"
+                        android:textColor="@color/weekday"
+                        android:textSize="50px" />
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="목"-->
-                        <!--android:textColor="@color/weekday"-->
-                        <!--android:textSize="60px" />-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="토"
+                        android:textColor="@color/saturday"
+                        android:textSize="50px" />
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="금"-->
-                        <!--android:textColor="@color/weekday"-->
-                        <!--android:textSize="60px" />-->
-
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="토"-->
-                        <!--android:textColor="@color/saturday"-->
-                        <!--android:textSize="60px" />-->
-
-                <!--</LinearLayout>-->
+                </LinearLayout>
 
                 <GridView
-                    android:layout_marginTop="5dp"
                     android:id="@+id/gridview"
-                    android:layout_weight="1"
-                    android:layout_height="400dp"
                     android:layout_width="match_parent"
-                    android:numColumns="7"
+                    android:layout_height="490dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
                     android:listSelector="#a2a2ff"
-                    >
-                </GridView>
+                    android:numColumns="7"></GridView>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:orientation="horizontal"
                     android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    >
+                    android:paddingRight="30dp">
 
                     <Button
                         android:id="@+id/add"
@@ -202,22 +207,32 @@
                         android:layout_height="50dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:background="@drawable/plus" />
+                        android:background="@drawable/plus"
+                        style="?android:attr/borderlessButtonStyle"/>
+
                     <Button
                         android:id="@+id/delete"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
                         android:background="@drawable/minus"
-                        android:layout_alignParentRight="true"/>
+                        style="?android:attr/borderlessButtonStyle"/>
                 </RelativeLayout>
             </LinearLayout>
+
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="30dp"
                 android:layout_height="50dp"
-                android:background="@drawable/move_right"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:background="@drawable/move_right" />
         </LinearLayout>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/keyboardPreview"
+        android:gravity="center"
+        android:text="광고"/>
 </LinearLayout>

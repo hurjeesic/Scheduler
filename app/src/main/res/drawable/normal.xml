@@ -3,6 +3,7 @@
     <item android:left="2dp" android:right="2dp">
         <shape android:shape="rectangle">
             <solid android:color="@color/keyboardDivider"/>
+            <corners android:radius="5dip"/>
         </shape>
     </item>
     <item android:bottom="2dp">

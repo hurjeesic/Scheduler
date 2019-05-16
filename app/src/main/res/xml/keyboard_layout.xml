@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:keyWidth="10%p"
-    android:horizontalGap="3px"
-    android:verticalGap="3px"
-    android:keyHeight="60dp"
+    android:horizontalGap="7px"
+    android:verticalGap="7px"
+    android:keyHeight="55dp"
     android:keyTextColor="@color/colorAccent"
     android:keyBackground="@color/colorPrimaryDark"
+
     >
     <Row>
-        <Key android:codes="49" android:keyLabel="1" android:keyEdgeFlags="left"/>
+        <Key android:codes="130" android:keyLabel="스케줄러" android:keyEdgeFlags="left" android:keyWidth="30%p"/>
+    </Row>
+    <Row>
+        <Key android:codes="49" android:keyLabel="1" android:keyEdgeFlags="left" />
         <Key android:codes="50" android:keyLabel="2"/>
         <Key android:codes="51" android:keyLabel="3"/>
         <Key android:codes="52" android:keyLabel="4"/>
