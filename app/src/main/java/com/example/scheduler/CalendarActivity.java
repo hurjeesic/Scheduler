@@ -3,11 +3,13 @@ package com.example.scheduler;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -42,6 +44,7 @@ public class CalendarActivity extends Activity {
      * 캘린더 변수
      */
     private Calendar mCal;
+    private int year, month;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,34 +68,50 @@ public class CalendarActivity extends Activity {
 
         mCal = Calendar.getInstance();
         //이번달 1일 무슨요일인지 판단 mCal.set(Year,Month,Day)
-        mCal.set(Integer.parseInt(curYearFormat.format(date)), Integer.parseInt(curMonthFormat.format(date)) - 1, 1);
+        year = Integer.parseInt(curYearFormat.format(date));
+        month = Integer.parseInt(curMonthFormat.format(date)) - 1;
+        mCal.set(year, month, Integer.parseInt(curDayFormat.format(date)));
 
         resetCalendar();
-    }
 
-    private void addMonth() {
-        mCal.set(Calendar.MONTH, mCal.get(Calendar.MONTH) + 1);
-        resetCalendar();
-    }
+        findViewById(R.id.PreviousMonthButton).setOnClickListener(
+            new Button.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    month--;
+                    resetCalendar();
+                }
+            }
+        );
 
-    private void divideMonth() {
-        mCal.set(Calendar.MONTH, mCal.get(Calendar.MONTH) - 1);
-        resetCalendar();
+        findViewById(R.id.NextMonthButton).setOnClickListener(
+            new Button.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    month++;
+                    resetCalendar();
+                }
+            }
+        );
     }
 
     private void resetCalendar() {
         dayList.clear();
-//        dayList.add("일");
-//        dayList.add("월");
-//        dayList.add("화");
-//        dayList.add("수");
-//        dayList.add("목");
-//        dayList.add("금");
-//        dayList.add("토");
+
+        if (month == 12) {
+            year++;
+            month = 0;
+        }
+        if (month == -1) {
+            year--;
+            month = 11;
+        }
+
+        mCal.set(year, month, 1);
 
         //현재 날짜 텍스트뷰에 뿌려줌
-        Month.setText(Integer.toString(mCal.get(Calendar.MONTH) + 1));
-        Year.setText(Integer.toString(mCal.get(Calendar.YEAR)));
+        Month.setText(Integer.toString(month + 1));
+        Year.setText(Integer.toString(year));
 
         int dayNum = mCal.get(Calendar.DAY_OF_WEEK);
         //1일 - 요일 매칭 시키기 위해 공백 add
@@ -100,7 +119,7 @@ public class CalendarActivity extends Activity {
             dayList.add("");
         }
 
-        setCalendarDate(mCal.get(Calendar.MONTH) + 1);
+        setCalendarDate();
 
         gridAdapter = new GridAdapter(getApplicationContext(), dayList);
         gridView.setAdapter(gridAdapter);
@@ -109,10 +128,9 @@ public class CalendarActivity extends Activity {
     /**
      * 해당 월에 표시할 일 수 구함
      *
-     * @param month
+     *
      */
-    private void setCalendarDate(int month) {
-        mCal.set(Calendar.MONTH, month - 1);
+    private void setCalendarDate() {
         for (int i = 0; i < mCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             dayList.add("" + (i + 1));
         }
@@ -161,23 +179,27 @@ public class CalendarActivity extends Activity {
             }
             holder.tvItemGridView.setText("" + getItem(position));
             //해당 날짜 텍스트 컬러,배경 변경
-            mCal = Calendar.getInstance();
+
             //오늘 day 가져옴
-            Integer today = mCal.get(Calendar.DAY_OF_MONTH);
+            Calendar mCalTmp = Calendar.getInstance();
+            Integer today = mCalTmp.get(Calendar.DAY_OF_MONTH);
             String sToday = String.valueOf(today);
-            if (System.currentTimeMillis() == mCal.getTimeInMillis() && sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
+            Date nowDate = new Date(System.currentTimeMillis());
+            final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
+            final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
+
+            if (Integer.parseInt(curYearFormat.format(nowDate)) == mCal.get(Calendar.YEAR) &&  Integer.parseInt(curMonthFormat.format(nowDate)) == mCal.get(Calendar.MONTH) + 1 &&
+                    sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
                 holder.tvItemGridView.setTextColor(getResources().getColor(R.color.black));
+                holder.tvItemGridView.setText(Html.fromHtml("<b>" + holder.tvItemGridView.getText() + "</b>"));
             }
 
-            if (position % 7 == 0) {
-                holder.tvItemGridView.setTextColor(getResources().getColor(R.color.sunday));
+            switch (position % 7) {
+                case 0: holder.tvItemGridView.setTextColor(getResources().getColor(R.color.sunday)); break;
+                case 6:  holder.tvItemGridView.setTextColor(getResources().getColor(R.color.saturday)); break;
+                default: holder.tvItemGridView.setTextColor(getResources().getColor(R.color.weekday));
             }
-            else if (position % 7 == 6) {
-                holder.tvItemGridView.setTextColor(getResources().getColor(R.color.saturday));
-            }
-            else{
-                holder.tvItemGridView.setTextColor(getResources().getColor(R.color.weekday));
-            }
+
             return convertView;
         }
     }

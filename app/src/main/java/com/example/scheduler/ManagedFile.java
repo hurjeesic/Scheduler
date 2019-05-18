@@ -163,7 +163,6 @@ public class ManagedFile {
                 fos.write(temp.getBytes());
 
                 fos.close();
-                Log.d("Information", "Save Success");
 
                 result = true;
             }

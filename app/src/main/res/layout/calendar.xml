@@ -80,6 +80,7 @@
 
             <Button
                 style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/PreviousMonthButton"
                 android:layout_width="30dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
@@ -222,6 +223,7 @@
 
             <Button
                 style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/NextMonthButton"
                 android:layout_width="30dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
