@@ -5,6 +5,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
@@ -39,11 +40,54 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
             return;
 
         playClick(i);
+        CharSequence selectedText = inputConnection.getSelectedText(0);
         switch (i) {
-            //case SUBMIT:
-                //break;
+            case SUBMIT:
+                final int MAX = 1000; // 한 줄의 최대 글자 수
+                // 먼저 매크로 인식을 위하여 커서를 맨 뒤로 이동
+                inputConnection.setSelection(0, 0);
+                inputConnection.commitText("", MAX);
+
+                // 커서가 맨 뒤에 있으므로 전체 텍스트를 커서를 기준으로 탐색
+                String disposeText = inputConnection.getTextBeforeCursor(MAX, 0).toString();
+                int instructionIndex = disposeText.indexOf(" ");
+                if (instructionIndex != -1)
+                {
+                    ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
+
+                    String instructionStr = disposeText.substring(0, instructionIndex);
+                    if (instructionStr.toUpperCase().equals("ADD") && disposeText.length() >= 14) { // ex) add 20190517 title
+                        int dateIndex = disposeText.indexOf(" ", instructionIndex + 1) + 1;
+                        if (dateIndex != 0) {
+                            String dateStr = disposeText.substring(instructionIndex + 1, dateIndex - 1);
+                            String[] data = new String[]{ disposeText.substring(dateIndex), "", "" };
+
+                            Log.d("Information", "Date : " + dateStr + " + Contents : " +  data[0]);
+                            manager.writeData(dateStr, data, true);
+                            //Log.d("Information", manager.readFile(dateStr).get(0)[0]);
+                        }
+                        else {
+                            Log.d("Information", "Invalid instruction");
+                        }
+                    }
+                    else if (instructionStr.toUpperCase().equals("DELETE") && disposeText.length() == 15) { // ex) delete 20190517
+                        int dateIndex = instructionIndex + 9;
+                        String dateStr = disposeText.substring(instructionIndex + 1, dateIndex);
+                        Log.d("Information", "Date : " + dateStr);
+                        manager.deleteFile(dateStr);
+                    }
+                    else {
+                        Log.d("Information", "Invalid instruction");
+                    }
+                }
+                else
+                {
+                    Log.d("Information", "Invalid instruction");
+                }
+
+                inputConnection.deleteSurroundingText(MAX, 0); //매크로 반영 후 텍스트 제거
+                break;
             case Keyboard.KEYCODE_DELETE :
-                CharSequence selectedText = inputConnection.getSelectedText(0);
                 if (TextUtils.isEmpty(selectedText)) {
                     inputConnection.deleteSurroundingText(1, 0);
                 } else {

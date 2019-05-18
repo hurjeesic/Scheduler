@@ -5,83 +5,116 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 
+// 안드로이드 파일 관리
+// https://berabue.tistory.com/24
 public class ManagedFile {
+    private String FILE_PATH;
+    private final String delimiter = "-- This is delimiter --\n";
 
-    private final String FILE_PATH = ManagedFile.class.getResource("").getPath() + "Data";
-    private final String delimiter = "-- This is delimiter --";
+    public ManagedFile(String path) {
+        FILE_PATH = path + File.separator + "Data";
 
-    private static ManagedFile instance = new ManagedFile();
-
-    public static ManagedFile getInstance() {
-        return instance;
+        //폴더가 존재하지 않으면 생성
+        File file = new File(FILE_PATH);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
     }
 
-    private ManagedFile() {
+    private boolean checkDate(String date) {
+        if (date == null || date.length() != 8) {
+            return false;
+        }
+        else {
+            try {
+                int year = Integer.parseInt(date.substring(0, 4)), month = Integer.parseInt(date.substring(4, 6)), day = Integer.parseInt(date.substring(6, 8));
+                Calendar cal = Calendar.getInstance();
+                cal.set(year, month - 1, 1);
+                if (month < 1 || month > 12 || day < 1 || day > cal.getActualMaximum(Calendar.DATE)) {
+                    Log.d("Information", "Invalid date range");
+                    return false;
+                }
+            }
+            catch (NumberFormatException ne) {
+                Log.d("Information", "Invalid date format");
 
+                return false;
+            }
+            catch (Exception e) {
+                Log.d("Information", "Unknown Exception");
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     //데이터 형식 : 제목, 내용, 태그
     //일정 목록을 보여줄 때 사용
     public ArrayList<String[]> readFile(String date) {
-        File f = null;
-        FileReader fr = null;
-        BufferedReader br = null;
         ArrayList<String[]> result = null;
 
         try {
-            f = new File(FILE_PATH, date);
+            if (checkDate(date)) {
+                File f = new File(FILE_PATH + File.separator + date + ".txt");
 
-            if (f.isFile()) {
-                fr = new FileReader(f);
-                br = new BufferedReader(fr);
+                if (f.isFile()) {
+                    FileInputStream fis = new FileInputStream(f);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 
-                result = new ArrayList<>();
-                String data;
+                    result = new ArrayList<>();
+                    String data;
 
-                String[] tmpResult = new String[3];
-                ArrayList<String> midContent = new ArrayList<>();
-                boolean bTitle = true;
-                while ((data = br.readLine()) != null) {
-                    if (bTitle) {
-                        bTitle = false;
-                        tmpResult[0] = data; // 제목 추가
-                    }
-                    else {
-                        midContent.add(data);
-                    }
-
-                    if (data.equals(delimiter)) {
-                        bTitle = true;
-
-                        midContent.remove(midContent.size() - 1); //내용 중 맨 뒷줄은 구분자이므로 제거
-
-                        tmpResult[2] = midContent.get(midContent.size() - 1);
-
-                        midContent.remove(midContent.size() - 1); //구분자 다음은 태그이므로 제거
-
-                        StringBuilder mid = new StringBuilder();
-                        for (int i = 0; i < midContent.size(); i++) {
-                            mid.append(midContent.get(i));
-                            if (i != midContent.size() - 1) {
-                                mid.append("\n");
-                            }
+                    String[] tmpResult = new String[3];
+                    ArrayList<String> midContent = new ArrayList<>();
+                    boolean bTitle = true;
+                    while ((data = br.readLine()) != null) {
+                        if (bTitle) {
+                            bTitle = false;
+                            tmpResult[0] = data; // 제목 추가
+                        }
+                        else {
+                            midContent.add(data);
                         }
 
-                        tmpResult[1] = mid.toString(); // 내용 부분 추가
+                        if (data.equals(delimiter)) {
+                            bTitle = true;
 
-                        result.add(tmpResult);
-                        tmpResult = new String[3];
-                        midContent.clear();
+                            midContent.remove(midContent.size() - 1); //내용 중 맨 뒷줄은 구분자이므로 제거
+
+                            tmpResult[2] = midContent.get(midContent.size() - 1);
+
+                            midContent.remove(midContent.size() - 1); //구분자 다음은 태그이므로 제거
+
+                            StringBuilder mid = new StringBuilder();
+                            for (int i = 0; i < midContent.size(); i++) {
+                                mid.append(midContent.get(i));
+                                if (i != midContent.size() - 1) {
+                                    mid.append("\n");
+                                }
+                            }
+
+                            tmpResult[1] = mid.toString(); // 내용 부분 추가
+
+                            result.add(tmpResult);
+                            tmpResult = new String[3];
+                            midContent.clear();
+                        }
                     }
+
+                    br.close();
+                    fis.close();
                 }
-            }
-            else {
-                return null;
             }
         }
         catch (IOException ie) {
@@ -89,25 +122,6 @@ public class ManagedFile {
         }
         catch (Exception e) {
             Log.e("예외", "알 수 없는 예외");
-        }
-        finally {
-            if (br != null) {
-                try {
-                    br.close();
-                }
-                catch (IOException ie) {
-                    Log.e("예외", "BufferedReader 종료 예외");
-                }
-            }
-
-            if (fr != null) {
-                try {
-                    fr.close();
-                }
-                catch (IOException ie) {
-                    Log.e("예외", "FileReader 종료 예외");
-                }
-            }
         }
 
         return result;
@@ -129,61 +143,55 @@ public class ManagedFile {
     }
 
     //파일에 내용을 추가하는 함수
-    public boolean writeData(String date, String[] data) {
-        boolean result = true;
+    public boolean writeData(String date, String[] data, boolean append) {
+        boolean result = false;
 
-        File f = null;
-        FileWriter fw = null;
-        BufferedWriter bw = null;
+        if (checkDate(date)) {
+            try {
+                //쓰기 위한 객체 생성
+                File f = new File(FILE_PATH + File.separator + date + ".txt"); //실제 쓸거
+                FileOutputStream fos = new FileOutputStream(f, append);
 
-        try {
-            f = new File(FILE_PATH, date);
+                //실제 쓰기 - byte 형식
+                for (int i = 0; i < 3; i++) {
+                    data[i] += '\n';
+                    fos.write(data[i].getBytes());
+                }
 
-            if (!f.exists()) {
-                f.createNewFile();
+                //Schedule 마다 구분자를 표시
+                fos.write(delimiter.getBytes());
+
+                fos.close();
+                Log.d("Information", "Save Success");
+
+                // 파일이 1개 이상이면 파일 이름 출력
+                File file = new File(FILE_PATH);
+                if (file.listFiles().length > 0) {
+                    for (File file2 : file.listFiles()) {
+                        String str = file2.getName();
+                        Log.e("Information", "fileName : " + str); // 파일 내용 읽어오기
+                        String loadPath = FILE_PATH + "/" + str;
+                        try {
+                            FileInputStream fis = new FileInputStream(loadPath);
+                            BufferedReader bufferReader = new BufferedReader(new InputStreamReader(fis));
+                            String temp = "";
+                            while ((temp = bufferReader.readLine()) != null) {
+                                Log.e("Information", "" + temp);
+                            }
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }
+
+                result = true;
             }
-
-            fw = new FileWriter(f, true);
-            bw = new BufferedWriter(fw);
-
-            for (int i = 0; i < 3; i++) {
-                bw.write(data[i]);
-                bw.newLine();
+            catch (IOException ie) {
+                Log.e("예외", "입출력 예외");
             }
-
-            bw.write(delimiter);
-            bw.newLine();
-
-            bw.flush();
-        }
-        catch (IOException ie) {
-            Log.e("예외", "입출력 예외");
-
-            result = false;
-        }
-        catch (Exception e) {
-            Log.e("예외", "알 수 없는 예외");
-
-            result = false;
-        }
-        finally
-        {
-            if (bw != null) {
-                try {
-                    bw.close();
-                }
-                catch (IOException ie) {
-                    Log.e("예외", "BufferedReader 종료 예외");
-                }
-            }
-
-            if (fw != null) {
-                try {
-                    fw.close();
-                }
-                catch (IOException ie) {
-                    Log.e("예외", "FileReader 종료 예외");
-                }
+            catch (Exception e) {
+                Log.e("예외", "알 수 없는 예외");
             }
         }
 
@@ -202,7 +210,7 @@ public class ManagedFile {
                 temp[j] = data.get(i)[j];
             }
 
-            result = writeData(date, temp);
+            result = writeData(date, temp, false);
         }
 
         return result;
