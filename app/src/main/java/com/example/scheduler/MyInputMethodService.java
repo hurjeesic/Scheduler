@@ -62,9 +62,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                             String dateStr = disposeText.substring(instructionIndex + 1, dateIndex - 1);
                             String[] data = new String[]{ disposeText.substring(dateIndex), "", "" };
 
-                            Log.d("Information", "Date : " + dateStr + " + Contents : " +  data[0]);
                             manager.writeData(dateStr, data, true);
-                            //Log.d("Information", manager.readFile(dateStr).get(0)[0]);
                         }
                         else {
                             Log.d("Information", "Invalid instruction");
@@ -113,7 +111,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
 
     private void playClick(int i) {
         AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
-        switch(i){
+        switch(i) {
             case 32:
                 am.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR);
                 break;

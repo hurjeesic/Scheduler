@@ -18,7 +18,7 @@ import java.util.Calendar;
 // https://berabue.tistory.com/24
 public class ManagedFile {
     private String FILE_PATH;
-    private final String delimiter = "-- This is delimiter --\n";
+    private final String delimiter = "-- This is delimiter --";
 
     public ManagedFile(String path) {
         FILE_PATH = path + File.separator + "Data";
@@ -159,31 +159,11 @@ public class ManagedFile {
                 }
 
                 //Schedule 마다 구분자를 표시
-                fos.write(delimiter.getBytes());
+                String temp = delimiter + '\n';
+                fos.write(temp.getBytes());
 
                 fos.close();
                 Log.d("Information", "Save Success");
-
-                // 파일이 1개 이상이면 파일 이름 출력
-                File file = new File(FILE_PATH);
-                if (file.listFiles().length > 0) {
-                    for (File file2 : file.listFiles()) {
-                        String str = file2.getName();
-                        Log.e("Information", "fileName : " + str); // 파일 내용 읽어오기
-                        String loadPath = FILE_PATH + "/" + str;
-                        try {
-                            FileInputStream fis = new FileInputStream(loadPath);
-                            BufferedReader bufferReader = new BufferedReader(new InputStreamReader(fis));
-                            String temp = "";
-                            while ((temp = bufferReader.readLine()) != null) {
-                                Log.e("Information", "" + temp);
-                            }
-
-                        } catch (Exception e) {
-
-                        }
-                    }
-                }
 
                 result = true;
             }
