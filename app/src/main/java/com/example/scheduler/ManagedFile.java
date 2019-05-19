@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 // 안드로이드 파일 관리
 // https://berabue.tistory.com/24
@@ -57,6 +58,34 @@ public class ManagedFile {
         }
 
         return true;
+    }
+
+    public ArrayList<String[]> allReadFile() {
+        ArrayList<String[]> result = null;
+
+        try {
+            File[] scheduleFiles = new File(FILE_PATH).listFiles();
+            if (scheduleFiles.length > 0) {
+                result = new ArrayList<>();
+                for (File scheduleFile : scheduleFiles) {
+                    String fileName, loadPath;
+
+                    fileName = scheduleFile.getName();
+                    fileName = fileName.substring(0, fileName.length() - 4);
+
+                    ArrayList<String[]> tempList = readFile(fileName);
+                    for (String[] scheduleItem : tempList) {
+                        String[] temp = { fileName, scheduleItem[0], scheduleItem[1], scheduleItem[2] };
+                        result.add(temp);
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+
+        }
+
+        return result;
     }
 
     //데이터 형식 : 제목, 내용, 태그

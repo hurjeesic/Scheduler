@@ -75,12 +75,23 @@ public class CalendarActivity extends Activity {
 
         resetCalendar();
 
+        findViewById(R.id.ScheduleSearchButton).setOnClickListener(
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
+
+                    startActivity(intent);
+                }
+            }
+        );
+
         findViewById(R.id.PreviousMonthButton).setOnClickListener(
             new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                month--;
-                resetCalendar();
+                    month--;
+                    resetCalendar();
                 }
             }
         );
@@ -89,8 +100,8 @@ public class CalendarActivity extends Activity {
             new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                month++;
-                resetCalendar();
+                    month++;
+                    resetCalendar();
                 }
             }
         );
@@ -99,9 +110,9 @@ public class CalendarActivity extends Activity {
             new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                Intent intent = new Intent(CalendarActivity.this, InsertionActivity.class);
+                    Intent intent = new Intent(CalendarActivity.this, InsertionActivity.class);
 
-                startActivity(intent);
+                    startActivity(intent);
                 }
             }
         );
