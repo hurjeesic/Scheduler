@@ -18,15 +18,23 @@
             android:layout_marginBottom="10dp"
             android:textSize="50px"/>
         <Spinner
+            android:id="@+id/insertion_year"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="40dp"></Spinner>
         <Spinner
+            android:id="@+id/insertion_month"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="50dp"></Spinner>
-        //https://bottlecok.tistory.com/63
 
+        <Spinner
+            android:id="@+id/insertion_day"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="1"></Spinner>
+        <!-- https://bottlecok.tistory.com/63 -->
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -88,6 +96,7 @@
 
     <Button
         style="?android:attr/borderlessButtonStyle"
+        android:id="@+id/InsertButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="right"

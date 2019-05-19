@@ -2,6 +2,7 @@ package com.example.scheduler;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -49,7 +50,7 @@ public class CalendarActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.calendar);
+
         setContentView(R.layout.calendar);
 
         Month = (TextView)findViewById(R.id.Month);
@@ -78,8 +79,8 @@ public class CalendarActivity extends Activity {
             new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    month--;
-                    resetCalendar();
+                month--;
+                resetCalendar();
                 }
             }
         );
@@ -88,8 +89,19 @@ public class CalendarActivity extends Activity {
             new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    month++;
-                    resetCalendar();
+                month++;
+                resetCalendar();
+                }
+            }
+        );
+
+        findViewById(R.id.add_button).setOnClickListener(
+            new Button.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                Intent intent = new Intent(CalendarActivity.this, InsertionActivity.class);
+
+                startActivity(intent);
                 }
             }
         );
