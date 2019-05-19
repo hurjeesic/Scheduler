@@ -1,6 +1,7 @@
 package com.example.scheduler;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,14 +29,14 @@ public class InsertionActivity extends Activity {
 
         // List를 활용한 Spinner
         // https://farmerkyh.tistory.com/412?category=687218
-        List<String> yearList = new ArrayList<String>();
+        List<String> yearList = new ArrayList<>();
         yearList.add("년");
         for(int i=1970; i< 2038; i++) {
             yearList.add(Integer.toString(i));
         }
 
         // 스피너에 뿌려질 List형식의 Data를 담을 Adapter
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, yearList);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, yearList);
 
         // Spinner 클릭시 DropDown 모양을 설정
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -43,7 +44,7 @@ public class InsertionActivity extends Activity {
         // 스피너에 어답터를 연결
         yearSpinner.setAdapter(spinnerArrayAdapter);
 
-        List<String> monthList = new ArrayList<String>();
+        List<String> monthList = new ArrayList<>();
         monthList.add("월");
         for(int i=1; i<= 12; i++) {
             if (i < 10) {
@@ -178,7 +179,11 @@ public class InsertionActivity extends Activity {
                         String dateStr = yearStr + monthStr + dayStr;
 
                         manager.writeData(dateStr, data, true);
-                        InsertionActivity.super.onBackPressed();
+
+                        Intent intent = new Intent(InsertionActivity.this, CalendarActivity.class);
+
+                        startActivity(intent);
+                        finish();
                     }
                 }
             }

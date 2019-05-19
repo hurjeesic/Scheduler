@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,6 +33,32 @@ public class SearchActivity extends Activity {
 
         searchItemList = new ArrayList<>();
 
+        setSearchItemList("");
+
+        findViewById(R.id.searchButton).setOnClickListener(
+                new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView findText = (TextView)findViewById(R.id.searchText);
+
+                        setSearchItemList(findText.getText().toString().toUpperCase());
+                    }
+                }
+        );
+
+        findViewById(R.id.ScheduleCalendarButton).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SearchActivity.super.onBackPressed();
+                    }
+                }
+        );
+    }
+
+    private void setSearchItemList(String find) {
+        searchItemList.clear();
+
         ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
         ArrayList<String[]> datas = manager.allReadFile();
         for (String[] data : datas) {
@@ -43,21 +70,14 @@ public class SearchActivity extends Activity {
                 }
             }
 
-            SearchListItem tempItem = new SearchListItem(data[0], data[1], tag.toString());
-            searchItemList.add(tempItem);
+            if (data[1].toUpperCase().contains(find) || data[2].toUpperCase().contains(find) || tag.toString().toUpperCase().contains(find)) {
+                SearchListItem tempItem = new SearchListItem(data[0], data[1], tag.toString());
+                searchItemList.add(tempItem);
+            }
         }
 
         listAdapter = new ListAdapter(SearchActivity.this, searchItemList);
         scheduleList.setAdapter(listAdapter);
-
-        findViewById(R.id.ScheduleCalendarButton).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        SearchActivity.super.onBackPressed();
-                    }
-                }
-        );
     }
 
     class SearchListItem {

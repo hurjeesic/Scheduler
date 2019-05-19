@@ -113,6 +113,7 @@ public class CalendarActivity extends Activity {
                     Intent intent = new Intent(CalendarActivity.this, InsertionActivity.class);
 
                     startActivity(intent);
+                    finish();
                 }
             }
         );
