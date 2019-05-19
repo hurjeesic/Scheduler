@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -152,25 +153,32 @@ public class InsertionActivity extends Activity {
             new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     Spinner yearSpinner = (Spinner)findViewById(R.id.insertion_year);
                     Spinner monthSpinner = (Spinner)findViewById(R.id.insertion_month);
                     Spinner daySpinner = (Spinner)findViewById(R.id.insertion_day);
+
+                    String yearStr = yearSpinner.getSelectedItem().toString();
+                    String monthStr = monthSpinner.getSelectedItem().toString();
+                    String dayStr = daySpinner.getSelectedItem().toString();
 
                     EditText title = (EditText)findViewById(R.id.insertion_title);
                     EditText contents = (EditText)findViewById(R.id.insertion_contents);
                     EditText tags = (EditText)findViewById(R.id.insertion_tag);
 
-                    if (yearSpinner.getSelectedItem().toString().equals("년") || monthSpinner.getSelectedItem().toString().equals("월") || daySpinner.getSelectedItem().toString().equals("일")) {
-
+                    if (yearStr.equals("년") || monthStr.equals("월") || dayStr.equals("일")) {
+                        Toast.makeText(InsertionActivity.this, "날짜는 반드시 입력하셔야합니다.", Toast.LENGTH_LONG).show();
                     }
                     else if (title.getText().toString().length() == 0) {
-
-                    }
-                    else if (title.getText().toString().length() == 0) {
-
+                        Toast.makeText(InsertionActivity.this, "제목은 반드시 입력하셔야합니다.", Toast.LENGTH_LONG).show();
                     }
                     else {
+                        ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
+                        String[] data = new String[]{ title.getText().toString(), contents.getText().toString(), tags.getText().toString() };
+                        String dateStr = yearStr + monthStr + dayStr;
 
+                        manager.writeData(dateStr, data, true);
+                        InsertionActivity.super.onBackPressed();
                     }
                 }
             }

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+// ListView 사용하기
+// https://medium.com/@henen/%EB%B9%A0%EB%A5%B4%EA%B2%8C-%EB%B0%B0%EC%9A%B0%EB%8A%94-%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EB%A6%AC%EC%8A%A4%ED%8A%B8%EB%B7%B0-listview-4-%ED%81%B4%EB%A6%AD%EC%9D%B4%EB%B2%A4%ED%8A%B8-onitemclicklistener-toast-4432e650cb
 public class SearchActivity extends Activity {
     ListView scheduleList;
     ListAdapter listAdapter;
@@ -33,10 +35,12 @@ public class SearchActivity extends Activity {
         ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
         ArrayList<String[]> datas = manager.allReadFile();
         for (String[] data : datas) {
-            String[] tags = data[3].split(",");
-            StringBuilder tag = new StringBuilder();
-            for (String temp : tags) {
-                tag.append("#").append(temp).append(" ");
+            StringBuilder tag = new StringBuilder("");
+            if (!data[3].equals("")) {
+                String[] tags = data[3].split(",");
+                for (String temp : tags) {
+                    tag.append("#").append(temp).append(" ");
+                }
             }
 
             SearchListItem tempItem = new SearchListItem(data[0], data[1], tag.toString());
