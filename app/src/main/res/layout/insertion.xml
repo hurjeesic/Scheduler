@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin ="40dp"
+    android:layout_marginBottom ="40dp"
+    android:layout_marginRight="40dp"
+    android:layout_marginLeft ="40dp"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,6 +48,7 @@
         <EditText
             android:id="@+id/insertion_title"
             android:layout_width="match_parent"
+            android:padding="7dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:ems="10"
@@ -68,7 +71,8 @@
         <EditText
             android:id="@+id/insertion_contents"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
+            android:padding="7dp"
             android:background="@drawable/border_mint"/>
     </LinearLayout>
     <LinearLayout
@@ -86,7 +90,8 @@
         <EditText
             android:id="@+id/insertion_tag"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="80dp"
+            android:padding="7dp"
             android:background="@drawable/border_mint"/>
     </LinearLayout>
 
