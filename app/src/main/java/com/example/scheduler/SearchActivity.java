@@ -100,7 +100,7 @@ public class SearchActivity extends Activity {
         Context context;
         List<SearchListItem> scheduleList;
 
-        TextView yearTextview, dateTextview, titleTextview, tagsTextview;
+        TextView yearTextview, monthTextview, titleTextview, tagsTextview, dayTextview;
 
         public ListAdapter(Context context, List<SearchListItem> scheduleList) {
             this.context = context;
@@ -127,13 +127,15 @@ public class SearchActivity extends Activity {
             if (convertView == null) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_calendar_listview, null);
                 yearTextview = (TextView)convertView.findViewById(R.id.search_list_year);
-                dateTextview = (TextView)convertView.findViewById(R.id.search_list_date);
+                monthTextview = (TextView)convertView.findViewById(R.id.search_list_month);
+                dayTextview = (TextView)convertView.findViewById(R.id.search_list_day);
                 titleTextview = (TextView)convertView.findViewById(R.id.search_list_title);
                 tagsTextview = (TextView)convertView.findViewById(R.id.search_list_tags);
             }
 
-            yearTextview.setText(scheduleList.get(position).getDate().substring(0, 4));
-            dateTextview.setText(scheduleList.get(position).getDate().substring(4));
+            yearTextview.setText(scheduleList.get(position).getDate().substring(0, 4)+"년");
+            monthTextview.setText(scheduleList.get(position).getDate().substring(4, 6)+"월");
+            dayTextview.setText(scheduleList.get(position).getDate().substring(6)+"일");
             titleTextview.setText(scheduleList.get(position).getTitle());
             tagsTextview.setText(scheduleList.get(position).getTags());
 
