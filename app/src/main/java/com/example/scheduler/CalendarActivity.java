@@ -47,6 +47,8 @@ public class CalendarActivity extends Activity {
     private Calendar mCal;
     private int year, month;
 
+    boolean[] bSchedule;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +147,7 @@ public class CalendarActivity extends Activity {
         }
 
         setCalendarDate();
+        checkMonthSchedule();
 
         gridAdapter = new GridAdapter(getApplicationContext(), dayList);
         gridView.setAdapter(gridAdapter);
@@ -156,11 +159,26 @@ public class CalendarActivity extends Activity {
      *
      */
     private void setCalendarDate() {
-        ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
         for (int i = 0; i < mCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             dayList.add("" + (i + 1));
         }
     }
+
+    private void checkMonthSchedule() {
+        bSchedule = new boolean[mCal.getActualMaximum(Calendar.DAY_OF_MONTH)];
+
+        ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
+        ArrayList<String[]> allScheduleList = manager.allReadFile();
+        for (String[] data : allScheduleList) {
+            int month = Integer.parseInt(data[0].substring(4, 6));
+            int day = Integer.parseInt(data[0].substring(6, 8));
+            if (!bSchedule[day - 1] &&  month == mCal.get(Calendar.MONTH) + 1) {
+                bSchedule[day - 1] = true;
+                Log.d("Information", day + " : " + data[2]);
+            }
+        }
+    }
+
     /**
      * 그리드뷰 어댑터
      *
@@ -168,6 +186,7 @@ public class CalendarActivity extends Activity {
     private class GridAdapter extends BaseAdapter {
         private final List<String> list;
         private final LayoutInflater inflater;
+
         /**
          * 생성자
          *
@@ -224,6 +243,11 @@ public class CalendarActivity extends Activity {
                 case 0: holder.tvItemGridView.setTextColor(getResources().getColor(R.color.sunday)); break;
                 case 6:  holder.tvItemGridView.setTextColor(getResources().getColor(R.color.saturday)); break;
                 default: holder.tvItemGridView.setTextColor(getResources().getColor(R.color.weekday));
+            }
+
+            position -= 2;
+            if (0 < position && position <= mCal.getActualMaximum(Calendar.DAY_OF_MONTH) && bSchedule[position - 1]) {
+                holder.tvItemGridView.setBackgroundColor(getResources().getColor(R.color.schedule));
             }
 
             return convertView;
