@@ -174,7 +174,6 @@ public class CalendarActivity extends Activity {
             int day = Integer.parseInt(data[0].substring(6, 8));
             if (!bSchedule[day - 1] &&  month == mCal.get(Calendar.MONTH) + 1) {
                 bSchedule[day - 1] = true;
-                Log.d("Information", day + " : " + data[2]);
             }
         }
     }
@@ -232,8 +231,10 @@ public class CalendarActivity extends Activity {
             Date nowDate = new Date(System.currentTimeMillis());
             final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
             final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
+            final SimpleDateFormat curDayFormat = new SimpleDateFormat("dd", Locale.KOREA);
+            final int year = Integer.parseInt(curYearFormat.format(nowDate)), month = Integer.parseInt(curMonthFormat.format(nowDate)), day = Integer.parseInt(curDayFormat.format(nowDate));
 
-            if (Integer.parseInt(curYearFormat.format(nowDate)) == mCal.get(Calendar.YEAR) &&  Integer.parseInt(curMonthFormat.format(nowDate)) == mCal.get(Calendar.MONTH) + 1 &&
+            if (year == mCal.get(Calendar.YEAR) &&  month == mCal.get(Calendar.MONTH) + 1 &&
                     sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
                 holder.tvItemGridView.setTextColor(getResources().getColor(R.color.black));
                 holder.tvItemGridView.setText(Html.fromHtml("<b>" + holder.tvItemGridView.getText() + "</b>"));
@@ -248,6 +249,22 @@ public class CalendarActivity extends Activity {
             position -= 2;
             if (0 < position && position <= mCal.getActualMaximum(Calendar.DAY_OF_MONTH) && bSchedule[position - 1]) {
                 holder.tvItemGridView.setBackgroundColor(getResources().getColor(R.color.schedule));
+
+                convertView.findViewById(R.id.tv_item_gridview).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d("Information", day + "일 선택됨");
+                            Intent intent = new Intent(CalendarActivity.this, DayScheduleActivity.class);
+
+                            intent.putExtra("year", year);
+                            intent.putExtra("month", month);
+                            intent.putExtra("day", day);
+
+                            startActivity(intent);
+                        }
+                    }
+                );
             }
 
             return convertView;
