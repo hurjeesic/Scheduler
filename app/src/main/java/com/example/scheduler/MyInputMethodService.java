@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
+import android.widget.Toast;
 
 // Service 객체를 이용한 custom keyboard 제작
 // https://github.com/ghrud92/android-custom-keyboard-example
@@ -65,22 +66,28 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                             manager.writeData(dateStr, data, true);
                         }
                         else {
-                            Log.d("Information", "Invalid instruction");
+                            Toast.makeText(getApplicationContext(), "Invalid instruction", Toast.LENGTH_LONG).show();
                         }
+                    }
+                    else if (instructionStr.toUpperCase().equals("DEL") && disposeText.length() == 12) { // ex) del 20190517
+                        int dateIndex = instructionIndex + 6;
+                        String dateStr = disposeText.substring(instructionIndex + 1, dateIndex);
+
+                        manager.deleteFile(dateStr);
                     }
                     else if (instructionStr.toUpperCase().equals("DELETE") && disposeText.length() == 15) { // ex) delete 20190517
                         int dateIndex = instructionIndex + 9;
                         String dateStr = disposeText.substring(instructionIndex + 1, dateIndex);
-                        Log.d("Information", "Date : " + dateStr);
+
                         manager.deleteFile(dateStr);
                     }
                     else {
-                        Log.d("Information", "Invalid instruction");
+                        Toast.makeText(getApplicationContext(), "Invalid instruction", Toast.LENGTH_LONG).show();
                     }
                 }
                 else
                 {
-                    Log.d("Information", "Invalid instruction");
+                    Toast.makeText(getApplicationContext(), "Invalid instruction", Toast.LENGTH_LONG).show();
                 }
 
                 inputConnection.deleteSurroundingText(MAX, 0); //매크로 반영 후 텍스트 제거

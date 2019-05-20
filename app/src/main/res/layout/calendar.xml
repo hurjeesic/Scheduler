@@ -60,7 +60,7 @@
                     android:background="@color/white"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:text="검색"></EditText>
+                    android:text=""></EditText>
 
                 <Button
                     android:layout_width="0dp"

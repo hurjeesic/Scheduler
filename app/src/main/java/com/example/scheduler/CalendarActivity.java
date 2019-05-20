@@ -82,6 +82,7 @@ public class CalendarActivity extends Activity {
                     Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
 
                     startActivity(intent);
+                    finish();
                 }
             }
         );
@@ -155,6 +156,7 @@ public class CalendarActivity extends Activity {
      *
      */
     private void setCalendarDate() {
+        ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
         for (int i = 0; i < mCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             dayList.add("" + (i + 1));
         }
