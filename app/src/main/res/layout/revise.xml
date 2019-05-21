@@ -111,7 +111,7 @@
 
     <Button
         style="?android:attr/borderlessButtonStyle"
-        android:id="@+id/InsertButton"
+        android:id="@+id/UpdateButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="right"
