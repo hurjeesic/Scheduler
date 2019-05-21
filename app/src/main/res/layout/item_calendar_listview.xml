@@ -36,7 +36,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="일"
-                    android:textSize="15dp"/></LinearLayout>
+                    android:textSize="15dp"/>
+                <TextView
+                    android:id="@+id/search_list_index"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="인덱스"
+                    android:textSize="0dp"/>
+            </LinearLayout>
 
             <!-- 월과 일이 들어감 -->
         </LinearLayout>
@@ -57,6 +64,7 @@
                     android:textSize="30dp"
                     android:text="제목"/>
                 <Button
+                    android:id="@+id/scheduleDeleteButton"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/des"

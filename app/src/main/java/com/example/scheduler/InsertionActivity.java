@@ -180,10 +180,8 @@ public class InsertionActivity extends Activity {
 
                         manager.writeData(dateStr, data, true);
 
-                        Intent intent = new Intent(InsertionActivity.this, CalendarActivity.class);
-
-                        startActivity(intent);
-                        finish();
+                        ManagedActivity.getInstance().moveActivity(InsertionActivity.this, CalendarActivity.class);
+                        ManagedActivity.getInstance().allActivityFinish();
                     }
                 }
             }

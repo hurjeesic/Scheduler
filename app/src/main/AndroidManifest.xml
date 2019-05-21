@@ -20,6 +20,8 @@
 
         <activity android:name=".SearchActivity" />
         <activity android:name=".InsertionActivity" />
+        <activity android:name=".DayScheduleActivity" />
+        <activity android:name=".UpdateActivity" />
 
         <service
             android:name=".MyInputMethodService"

@@ -3,17 +3,13 @@ package com.example.scheduler;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 // 안드로이드 파일 관리
 // https://berabue.tistory.com/24
@@ -65,8 +61,8 @@ public class ManagedFile {
 
         try {
             File[] scheduleFiles = new File(FILE_PATH).listFiles();
+            result = new ArrayList<>();
             if (scheduleFiles.length > 0) {
-                result = new ArrayList<>();
                 for (File scheduleFile : scheduleFiles) {
                     String fileName, loadPath;
 
@@ -75,7 +71,7 @@ public class ManagedFile {
 
                     ArrayList<String[]> tempList = readFile(fileName);
                     for (String[] scheduleItem : tempList) {
-                        String[] temp = { fileName, scheduleItem[0], scheduleItem[1], scheduleItem[2] };
+                        String[] temp = { fileName, scheduleItem[0], scheduleItem[1], scheduleItem[2], scheduleItem[3] };
                         result.add(temp);
                     }
                 }
@@ -98,19 +94,20 @@ public class ManagedFile {
                 File f = new File(FILE_PATH + File.separator + date + ".txt");
 
                 if (f.isFile()) {
+                    int index = 0;
                     FileInputStream fis = new FileInputStream(f);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 
                     result = new ArrayList<>();
                     String data;
 
-                    String[] tmpResult = new String[3];
+                    String[] tmpResult = new String[4];
                     ArrayList<String> midContent = new ArrayList<>();
                     boolean bTitle = true;
                     while ((data = br.readLine()) != null) {
                         if (bTitle) {
                             bTitle = false;
-                            tmpResult[0] = data; // 제목 추가
+                            tmpResult[1] = data; // 제목 추가
                         }
                         else {
                             midContent.add(data);
@@ -118,10 +115,11 @@ public class ManagedFile {
 
                         if (data.equals(delimiter)) {
                             bTitle = true;
+                            tmpResult[0] = Integer.toString(index++);
 
                             midContent.remove(midContent.size() - 1); //내용 중 맨 뒷줄은 구분자이므로 제거
 
-                            tmpResult[2] = midContent.get(midContent.size() - 1);
+                            tmpResult[3] = midContent.get(midContent.size() - 1);
 
                             midContent.remove(midContent.size() - 1); //구분자 다음은 태그이므로 제거
 
@@ -133,10 +131,11 @@ public class ManagedFile {
                                 }
                             }
 
-                            tmpResult[1] = mid.toString(); // 내용 부분 추가
+                            tmpResult[2] = mid.toString(); // 내용 부분 추가
 
                             result.add(tmpResult);
-                            tmpResult = new String[3];
+
+                            tmpResult = new String[4];
                             midContent.clear();
                         }
                     }
@@ -156,11 +155,15 @@ public class ManagedFile {
         return result;
     }
 
+    public String[] readData(String date, int index) {
+        return readFile(date).get(index);
+    }
+
     public void deleteFile(String date) {
         File f = null;
 
         try {
-            f = new File(FILE_PATH, date);
+            f = new File(FILE_PATH + File.separator + date + ".txt");
 
             if (f.exists()) {
                 f.delete();
@@ -232,9 +235,21 @@ public class ManagedFile {
             result = false;
         }
         else {
-            totalData.set(index, data);
+            if (data == null) {
+                totalData.remove(index);
+            }
+            else {
+                totalData.set(index, data);
+            }
+
             result = writeData(date, totalData);
         }
+
+        return result;
+    }
+
+    public boolean deleteData(String date, int index) {
+        boolean result = updateData(date, null, index);
 
         return result;
     }

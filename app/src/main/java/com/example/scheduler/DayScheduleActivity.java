@@ -2,7 +2,9 @@ package com.example.scheduler;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,73 +16,61 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-// ListView 사용하기
-// https://medium.com/@henen/%EB%B9%A0%EB%A5%B4%EA%B2%8C-%EB%B0%B0%EC%9A%B0%EB%8A%94-%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EB%A6%AC%EC%8A%A4%ED%8A%B8%EB%B7%B0-listview-4-%ED%81%B4%EB%A6%AD%EC%9D%B4%EB%B2%A4%ED%8A%B8-onitemclicklistener-toast-4432e650cb
-public class SearchActivity extends Activity {
+public class DayScheduleActivity extends Activity {
+    TextView yearTextView;
+    TextView monthTextView;
+    TextView dayTextView;
+
     ListView scheduleListView;
     ListAdapter listAdapter;
     List<SearchListItem> searchItemList;
-    String find;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.search);
+        setContentView(R.layout.day_scheduler);
 
         scheduleListView = (ListView)findViewById(R.id.schedule_list);
 
         searchItemList = new ArrayList<>();
 
-        find = "";
-        setSearchItemList(find);
+        yearTextView = (TextView)findViewById(R.id.scheduler_year);
+        monthTextView = (TextView)findViewById(R.id.scheduler_month);
+        dayTextView = (TextView)findViewById(R.id.scheduler_day);
 
-        findViewById(R.id.ScheduleCalendarButton).setOnClickListener(
-            new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ManagedActivity.getInstance().moveActivity(SearchActivity.this, CalendarActivity.class);
-                    ManagedActivity.getInstance().allActivityFinish();
-                }
-            }
-        );
+        Intent intent = getIntent();
 
-        findViewById(R.id.searchButton).setOnClickListener(
-            new Button.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TextView findText = (TextView)findViewById(R.id.searchText);
-                    find = findText.getText().toString().toUpperCase();
-                    setSearchItemList(find);
-                }
-            }
-        );
+        yearTextView.setText(intent.getExtras().getString("year"));
+        monthTextView.setText(intent.getExtras().getString("month"));
+        dayTextView.setText(intent.getExtras().getString("day"));
+
+        setSearchItemList(yearTextView.getText().toString() + monthTextView.getText().toString() + dayTextView.getText().toString());
     }
 
-    private void setSearchItemList(String find) {
+    private void setSearchItemList(String date) {
         searchItemList.clear();
 
         ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
-        ArrayList<String[]> datas = manager.allReadFile();
+
+        ArrayList<String[]> datas = manager.readFile(date);
         for (String[] data : datas) {
             StringBuilder tag = new StringBuilder("");
-            if (!data[4].equals("")) {
-                String[] tags = data[4].split(",");
+            if (!data[3].equals("")) {
+                String[] tags = data[3].split(",");
                 for (String temp : tags) {
                     tag.append("#").append(temp).append(" ");
                 }
             }
 
-            if (data[2].toUpperCase().contains(find) || data[3].toUpperCase().contains(find) || tag.toString().toUpperCase().contains(find)) {
-                SearchListItem tempItem = new SearchListItem(data[0], data[1], data[2], tag.toString());
-                searchItemList.add(tempItem);
-            }
+
+            SearchListItem tempItem = new SearchListItem(date, data[0], data[1], tag.toString());
+            searchItemList.add(tempItem);
         }
 
-        if (searchItemList.size() != 0) {
-            listAdapter = new ListAdapter(SearchActivity.this, searchItemList);
-            scheduleListView.setAdapter(listAdapter);
-        }
+        listAdapter = new ListAdapter(DayScheduleActivity.this, searchItemList);
+        if (listAdapter == null) Log.d("Information", "setSearchItemList: ");
+        scheduleListView.setAdapter(listAdapter);
     }
 
     private class ListAdapter extends BaseAdapter {
@@ -132,30 +122,30 @@ public class SearchActivity extends Activity {
             final String dateStr = getItem(position).getDate();
             final String indexStr = getItem(position).getIndex();
 
-            Button deleteButton = (Button)convertView.findViewById(R.id.scheduleDeleteButton);
-            deleteButton.setOnClickListener(
-                new Button.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
-                        if (manager.deleteData(dateStr, Integer.parseInt(indexStr))) {
-                            scheduleList.remove(index);
-                            listAdapter.notifyDataSetChanged();
-                            scheduleListView.setAdapter(listAdapter);
-                        }
-                    }
-                }
-            );
-
             convertView.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String[] dateAry = { "date", dateStr };
                         String[] indexAry = { "index", indexStr };
-                        ManagedActivity.getInstance().moveActivity(SearchActivity.this, UpdateActivity.class, dateAry, indexAry);
+                        ManagedActivity.getInstance().moveActivity(DayScheduleActivity.this, UpdateActivity.class, dateAry, indexAry);
                     }
                 }
+            );
+
+            Button deleteButton = (Button)convertView.findViewById(R.id.scheduleDeleteButton);
+            deleteButton.setOnClickListener(
+                    new Button.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
+                            if (manager.deleteData(dateStr, Integer.parseInt(indexStr))) {
+                                scheduleList.remove(index);
+                                listAdapter.notifyDataSetChanged();
+                                scheduleListView.setAdapter(listAdapter);
+                            }
+                        }
+                    }
             );
 
             return convertView;

@@ -47,6 +47,8 @@ public class CalendarActivity extends Activity {
     private Calendar mCal;
     private int year, month;
 
+    boolean[] bSchedule;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +81,7 @@ public class CalendarActivity extends Activity {
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
-
-                    startActivity(intent);
+                    ManagedActivity.getInstance().moveActivity(CalendarActivity.this, SearchActivity.class);
                 }
             }
         );
@@ -110,10 +110,7 @@ public class CalendarActivity extends Activity {
             new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(CalendarActivity.this, InsertionActivity.class);
-
-                    startActivity(intent);
-                    finish();
+                    ManagedActivity.getInstance().moveActivity(CalendarActivity.this, InsertionActivity.class);
                 }
             }
         );
@@ -144,6 +141,7 @@ public class CalendarActivity extends Activity {
         }
 
         setCalendarDate();
+        checkMonthSchedule();
 
         gridAdapter = new GridAdapter(getApplicationContext(), dayList);
         gridView.setAdapter(gridAdapter);
@@ -159,6 +157,21 @@ public class CalendarActivity extends Activity {
             dayList.add("" + (i + 1));
         }
     }
+
+    private void checkMonthSchedule() {
+        bSchedule = new boolean[mCal.getActualMaximum(Calendar.DAY_OF_MONTH)];
+
+        ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
+        ArrayList<String[]> allScheduleList = manager.allReadFile();
+        for (String[] data : allScheduleList) {
+            int month = Integer.parseInt(data[0].substring(4, 6));
+            int day = Integer.parseInt(data[0].substring(6, 8));
+            if (!bSchedule[day - 1] &&  month == mCal.get(Calendar.MONTH) + 1) {
+                bSchedule[day - 1] = true;
+            }
+        }
+    }
+
     /**
      * 그리드뷰 어댑터
      *
@@ -166,6 +179,7 @@ public class CalendarActivity extends Activity {
     private class GridAdapter extends BaseAdapter {
         private final List<String> list;
         private final LayoutInflater inflater;
+
         /**
          * 생성자
          *
@@ -211,8 +225,8 @@ public class CalendarActivity extends Activity {
             Date nowDate = new Date(System.currentTimeMillis());
             final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
             final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
-
-            if (Integer.parseInt(curYearFormat.format(nowDate)) == mCal.get(Calendar.YEAR) &&  Integer.parseInt(curMonthFormat.format(nowDate)) == mCal.get(Calendar.MONTH) + 1 &&
+            final int year = mCal.get(Calendar.YEAR), month = mCal.get(Calendar.MONTH) + 1;
+            if (Integer.parseInt(curYearFormat.format(nowDate)) == year &&  Integer.parseInt(curMonthFormat.format(nowDate)) == mCal.get(Calendar.MONTH) + 1 &&
                     sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
                 holder.tvItemGridView.setTextColor(getResources().getColor(R.color.black));
                 holder.tvItemGridView.setText(Html.fromHtml("<b>" + holder.tvItemGridView.getText() + "</b>"));
@@ -222,6 +236,23 @@ public class CalendarActivity extends Activity {
                 case 0: holder.tvItemGridView.setTextColor(getResources().getColor(R.color.sunday)); break;
                 case 6:  holder.tvItemGridView.setTextColor(getResources().getColor(R.color.saturday)); break;
                 default: holder.tvItemGridView.setTextColor(getResources().getColor(R.color.weekday));
+            }
+
+            final int day = getItem(position) == "" ? 0 : Integer.parseInt(getItem(position));
+            if (0 < day && day<= mCal.getActualMaximum(Calendar.DAY_OF_MONTH) && bSchedule[day - 1]) {
+                holder.tvItemGridView.setBackgroundColor(getResources().getColor(R.color.schedule));
+
+                convertView.findViewById(R.id.tv_item_gridview).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String[] yearAry = { "year", Integer.toString(year) };
+                            String[] monthAry = { "month", month < 10 ? "0" + month : Integer.toString(month) };
+                            String[] dayAry = { "day", day < 10 ? "0" + day : Integer.toString(day) };
+                            ManagedActivity.getInstance().moveActivity(CalendarActivity.this, DayScheduleActivity.class, yearAry, monthAry, dayAry);
+                        }
+                    }
+                );
             }
 
             return convertView;
