@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin ="40dp"
+    android:layout_marginBottom="40dp"
     >
 
     <LinearLayout
@@ -14,12 +14,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:background="@drawable/border_dark_purple"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/scheduler_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:text="year"
                 android:textSize="15dp" />
 
@@ -44,11 +48,11 @@
                     android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>
+
         <ListView
             android:id="@+id/schedule_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/border_mint"></ListView>
+            android:layout_height="match_parent"></ListView>
     </LinearLayout>
     <Button
         style="?android:attr/borderlessButtonStyle"
@@ -56,7 +60,7 @@
         android:layout_height="50dp"
         android:layout_gravity="right"
         android:layout_margin="20dp"
-        android:background="@drawable/submit" />
+        android:background="@drawable/submit"/>
 
     
 

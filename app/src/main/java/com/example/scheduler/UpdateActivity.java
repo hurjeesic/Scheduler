@@ -26,7 +26,6 @@ public class UpdateActivity extends Activity {
         monthTextView = (TextView)findViewById(R.id.scheduler_month);
         dayTextView = (TextView)findViewById(R.id.scheduler_day);
         indexTextView = (TextView)findViewById(R.id.scheduler_index);
-
         titleEditText = (EditText)findViewById(R.id.revise_title);
         contentsEditText = (EditText)findViewById(R.id.revise_contents);
         tagEditText = (EditText)findViewById(R.id.revise_tag);
@@ -35,9 +34,9 @@ public class UpdateActivity extends Activity {
         String dateStr = intent.getExtras().getString("date");
         String indexStr = intent.getExtras().getString("index");
 
-        yearTextView.setText(dateStr.substring(0, 4));
-        monthTextView.setText(dateStr.substring(4, 6));
-        dayTextView.setText(dateStr.substring(6, 8));
+        yearTextView.setText(dateStr.substring(0, 4)+"년");
+        monthTextView.setText((Integer.parseInt(dateStr.substring(4, 6)))+"월");
+        dayTextView.setText((Integer.parseInt(dateStr.substring(6, 8)))+"일");
         indexTextView.setText(indexStr);
 
         ManagedFile manager = new ManagedFile(getFilesDir().getAbsolutePath());
