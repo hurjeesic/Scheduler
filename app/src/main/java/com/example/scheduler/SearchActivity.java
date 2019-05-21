@@ -2,7 +2,6 @@ package com.example.scheduler;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,10 +39,8 @@ public class SearchActivity extends Activity {
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(SearchActivity.this, CalendarActivity.class);
-
-                    startActivity(intent);
-                    finish();
+                    ManagedActivity.getInstance().moveActivity(SearchActivity.this, CalendarActivity.class);
+                    ManagedActivity.getInstance().allActivityFinish();
                 }
             }
         );
@@ -146,6 +143,17 @@ public class SearchActivity extends Activity {
                             listAdapter.notifyDataSetChanged();
                             scheduleListView.setAdapter(listAdapter);
                         }
+                    }
+                }
+            );
+
+            convertView.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String[] dateAry = { "date", dateStr };
+                        String[] indexAry = { "index", indexStr };
+                        ManagedActivity.getInstance().moveActivity(SearchActivity.this, UpdateActivity.class, dateAry, indexAry);
                     }
                 }
             );

@@ -122,6 +122,17 @@ public class DayScheduleActivity extends Activity {
             final String dateStr = getItem(position).getDate();
             final String indexStr = getItem(position).getIndex();
 
+            convertView.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String[] dateAry = { "date", dateStr };
+                        String[] indexAry = { "index", indexStr };
+                        ManagedActivity.getInstance().moveActivity(DayScheduleActivity.this, UpdateActivity.class, dateAry, indexAry);
+                    }
+                }
+            );
+
             Button deleteButton = (Button)convertView.findViewById(R.id.scheduleDeleteButton);
             deleteButton.setOnClickListener(
                     new Button.OnClickListener() {

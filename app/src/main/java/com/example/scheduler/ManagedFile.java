@@ -155,6 +155,10 @@ public class ManagedFile {
         return result;
     }
 
+    public String[] readData(String date, int index) {
+        return readFile(date).get(index);
+    }
+
     public void deleteFile(String date) {
         File f = null;
 

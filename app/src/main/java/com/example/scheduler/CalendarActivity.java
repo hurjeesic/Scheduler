@@ -81,10 +81,7 @@ public class CalendarActivity extends Activity {
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
-
-                    startActivity(intent);
-                    finish();
+                    ManagedActivity.getInstance().moveActivity(CalendarActivity.this, SearchActivity.class);
                 }
             }
         );
@@ -113,10 +110,7 @@ public class CalendarActivity extends Activity {
             new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(CalendarActivity.this, InsertionActivity.class);
-
-                    startActivity(intent);
-                    finish();
+                    ManagedActivity.getInstance().moveActivity(CalendarActivity.this, InsertionActivity.class);
                 }
             }
         );
@@ -252,13 +246,10 @@ public class CalendarActivity extends Activity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(CalendarActivity.this, DayScheduleActivity.class);
-
-                            intent.putExtra("year", Integer.toString(year));
-                            intent.putExtra("month", month < 10 ? "0" + month : Integer.toString(month));
-                            intent.putExtra("day", day < 10 ? "0" + day : Integer.toString(day));
-
-                            startActivity(intent);
+                            String[] yearAry = { "year", Integer.toString(year) };
+                            String[] monthAry = { "month", month < 10 ? "0" + month : Integer.toString(month) };
+                            String[] dayAry = { "day", day < 10 ? "0" + day : Integer.toString(day) };
+                            ManagedActivity.getInstance().moveActivity(CalendarActivity.this, DayScheduleActivity.class, yearAry, monthAry, dayAry);
                         }
                     }
                 );
