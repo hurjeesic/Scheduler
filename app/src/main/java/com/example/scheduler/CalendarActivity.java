@@ -2,8 +2,9 @@ package com.example.scheduler;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,11 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,30 +30,21 @@ import java.util.Locale;
 // Grid View를 이용한 달력 제작
 // https://heum-story.tistory.com/6
 public class CalendarActivity extends Activity {
-    /**
-     * 연/월 텍스트뷰
-     */
+
     private TextView Month;
     private TextView Year;
-    /**
-     * 그리드뷰 어댑터
-     */
+
     private GridAdapter gridAdapter;
-    /**
-     * 일 저장 할 리스트
-     */
+
     private ArrayList<String> dayList;
-    /**
-     * 그리드뷰
-     */
+
     private GridView gridView;
-    /**
-     * 캘린더 변수
-     */
+
     private Calendar mCal;
     private int year, month;
 
     boolean[] bSchedule;
+    ArrayList<String[]> weathers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,19 +58,14 @@ public class CalendarActivity extends Activity {
         dayList = new ArrayList<>();
 
         // 오늘에 날짜를 세팅 해준다.
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-
-        //연,월,일을 따로 저장
-        final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
-        final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
-        final SimpleDateFormat curDayFormat = new SimpleDateFormat("dd", Locale.KOREA);
+        Calendar cal = Calendar.getInstance();
 
         mCal = Calendar.getInstance();
+
         //이번달 1일 무슨요일인지 판단 mCal.set(Year,Month,Day)
-        year = Integer.parseInt(curYearFormat.format(date));
-        month = Integer.parseInt(curMonthFormat.format(date)) - 1;
-        mCal.set(year, month, Integer.parseInt(curDayFormat.format(date)));
+        year = Integer.parseInt(new SimpleDateFormat("yyyy", Locale.KOREA).format(cal.getTime()));
+        month = Integer.parseInt(new SimpleDateFormat("MM", Locale.KOREA).format(cal.getTime())) - 1;
+        mCal.set(year, month, Integer.parseInt(new SimpleDateFormat("dd", Locale.KOREA).format(cal.getTime())));
 
         resetCalendar();
 
@@ -117,6 +109,7 @@ public class CalendarActivity extends Activity {
     }
 
     private void resetCalendar() {
+        setWeather();
         dayList.clear();
 
         if (month == 12) {
@@ -150,7 +143,6 @@ public class CalendarActivity extends Activity {
     /**
      * 해당 월에 표시할 일 수 구함
      *
-     *
      */
     private void setCalendarDate() {
         for (int i = 0; i < mCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
@@ -169,6 +161,34 @@ public class CalendarActivity extends Activity {
             if (!bSchedule[day - 1] &&  month == mCal.get(Calendar.MONTH) + 1) {
                 bSchedule[day - 1] = true;
             }
+        }
+    }
+
+    private void setWeather() {
+        weathers = new ArrayList<String[]>();
+
+        WeatherConnection weatherConnection = new WeatherConnection();
+        AsyncTask<String, String, String> weathers = weatherConnection.execute("","");
+
+        try {
+            String weathersStr = weathers.get();
+            String[] weathersStrAry = weathersStr.split("\r");
+            Calendar today = Calendar.getInstance();
+            for (int i = 0; i < weathersStrAry.length; i++) {
+                int year, month, day;
+                String[] tempAry = new String[2];
+                year = today.get(Calendar.YEAR);
+                month = today.get(Calendar.MONTH) + 1;
+                day = today.get(Calendar.DATE);
+                tempAry[0] = year + (month < 10 ? "0" + month : Integer.toString(month)) + (day < 10 ? "0" + day : Integer.toString(day));
+                tempAry[1]  = weathersStrAry[i];
+
+                this.weathers.add(tempAry);
+                today.set(Calendar.DATE, day + 1);
+            }
+        }
+        catch (Exception e) {
+
         }
     }
 
@@ -219,15 +239,21 @@ public class CalendarActivity extends Activity {
             //해당 날짜 텍스트 컬러,배경 변경
 
             //오늘 day 가져옴
-            Calendar mCalTmp = Calendar.getInstance();
-            Integer today = mCalTmp.get(Calendar.DAY_OF_MONTH);
+            Calendar todayCal = Calendar.getInstance();
+            todayCal.setTimeInMillis(System.currentTimeMillis());
+            Integer today = todayCal.get(Calendar.DAY_OF_MONTH);
             String sToday = String.valueOf(today);
-            Date nowDate = new Date(System.currentTimeMillis());
-            final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
-            final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
-            final int year = mCal.get(Calendar.YEAR), month = mCal.get(Calendar.MONTH) + 1;
-            if (Integer.parseInt(curYearFormat.format(nowDate)) == year &&  Integer.parseInt(curMonthFormat.format(nowDate)) == mCal.get(Calendar.MONTH) + 1 &&
-                    sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
+            if (weathers.size() != 0) {
+                String dateStr = weathers.get(0)[0];
+                if (year == Integer.parseInt(dateStr.substring(0, 4)) &&
+                    month == Integer.parseInt(dateStr.substring(4, 6)) - 1 &&
+                    getItem(position).equals(Integer.toString(Integer.parseInt(dateStr.substring(6, 8))))) {
+                    holder.tvItemGridView.setText(Html.fromHtml("<font size=1>" + holder.tvItemGridView.getText() + "\n" + weathers.remove(0)[1]) + "</font>");
+                }
+            }
+
+            if (todayCal.get(Calendar.YEAR) == mCal.get(Calendar.YEAR) &&  todayCal.get(Calendar.MONTH) == mCal.get(Calendar.MONTH) &&
+                sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
                 holder.tvItemGridView.setTextColor(getResources().getColor(R.color.black));
                 holder.tvItemGridView.setText(Html.fromHtml("<b>" + holder.tvItemGridView.getText() + "</b>"));
             }
@@ -261,5 +287,38 @@ public class CalendarActivity extends Activity {
 
     private class ViewHolder {
         TextView tvItemGridView;
+    }
+
+    // 네이버 날씨
+    // https://github.com/xxria17/android
+    // 네트워크 작업은 AsyncTask 를 사용해야 한다
+    public class WeatherConnection extends AsyncTask<String, String, String> {
+        // 백그라운드에서 작업하게 한다
+        @Override
+        protected String doInBackground(String... params) {
+            // Jsoup을 이용한 날씨데이터 Pasing하기.
+            try {
+                //제주특별자치도 제주시 아라동 기준
+                String path = "https://weather.naver.com/rgn/townWetr.nhn?naverRgnCd=14110630";
+                Document document = Jsoup.connect(path).get();
+                //Elements elements = document.select(".nm");
+                Elements temperatures = document.select(".nm");
+                Elements weathers = document.select(".info");
+
+                ArrayList<String> temperaturesStr = new ArrayList<>(temperatures.eachText());
+                ArrayList<String> weathersStr = new ArrayList<>(weathers.eachText());
+                String result = "";
+                for (int i = 0; i < weathers.size(); i += 2) {
+                    result += temperaturesStr.get(i).substring(2, 7) + "\n" + weathersStr.get(i).split("\n")[0] + "\r";
+                }
+
+                return result;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 }
