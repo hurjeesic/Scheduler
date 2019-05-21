@@ -231,10 +231,8 @@ public class CalendarActivity extends Activity {
             Date nowDate = new Date(System.currentTimeMillis());
             final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
             final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
-            final SimpleDateFormat curDayFormat = new SimpleDateFormat("dd", Locale.KOREA);
-            final int year = Integer.parseInt(curYearFormat.format(nowDate)), month = Integer.parseInt(curMonthFormat.format(nowDate)), day = Integer.parseInt(curDayFormat.format(nowDate));
-
-            if (year == mCal.get(Calendar.YEAR) &&  month == mCal.get(Calendar.MONTH) + 1 &&
+            final int year = mCal.get(Calendar.YEAR), month = mCal.get(Calendar.MONTH) + 1;
+            if (Integer.parseInt(curYearFormat.format(nowDate)) == year &&  Integer.parseInt(curMonthFormat.format(nowDate)) == mCal.get(Calendar.MONTH) + 1 &&
                     sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
                 holder.tvItemGridView.setTextColor(getResources().getColor(R.color.black));
                 holder.tvItemGridView.setText(Html.fromHtml("<b>" + holder.tvItemGridView.getText() + "</b>"));
@@ -246,20 +244,19 @@ public class CalendarActivity extends Activity {
                 default: holder.tvItemGridView.setTextColor(getResources().getColor(R.color.weekday));
             }
 
-            position -= 2;
-            if (0 < position && position <= mCal.getActualMaximum(Calendar.DAY_OF_MONTH) && bSchedule[position - 1]) {
+            final int day = getItem(position) == "" ? 0 : Integer.parseInt(getItem(position));
+            if (0 < day && day<= mCal.getActualMaximum(Calendar.DAY_OF_MONTH) && bSchedule[day - 1]) {
                 holder.tvItemGridView.setBackgroundColor(getResources().getColor(R.color.schedule));
 
                 convertView.findViewById(R.id.tv_item_gridview).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Log.d("Information", day + "일 선택됨");
                             Intent intent = new Intent(CalendarActivity.this, DayScheduleActivity.class);
 
-                            intent.putExtra("year", year);
-                            intent.putExtra("month", month);
-                            intent.putExtra("day", day);
+                            intent.putExtra("year", Integer.toString(year));
+                            intent.putExtra("month", month < 10 ? "0" + month : Integer.toString(month));
+                            intent.putExtra("day", day < 10 ? "0" + day : Integer.toString(day));
 
                             startActivity(intent);
                         }

@@ -86,53 +86,11 @@ public class SearchActivity extends Activity {
         }
     }
 
-    class SearchListItem {
-        private String date;
-        private String title;
-        private String tags;
-        private String index;
-
-        public SearchListItem(String date, String index, String title, String tags) {
-            this.date = date;
-            this.index = index;
-            this.title = title;
-            this.tags = tags;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getTags() {
-            return tags;
-        }
-
-        public void setTags(String tags) {
-            this.tags = tags;
-        }
-
-        public String getIndex() {
-            return index;
-        }
-    }
-
     private class ListAdapter extends BaseAdapter {
         Context context;
         List<SearchListItem> scheduleList;
 
-        TextView yearTextview, monthTextview, indexTextview, titleTextview, tagsTextview, dayTextview;
+        TextView yearTextview, monthTextview, dayTextview, indexTextview, titleTextview, tagsTextview;
 
         public ListAdapter(Context context, List<SearchListItem> scheduleList) {
             this.context = context;
@@ -165,7 +123,7 @@ public class SearchActivity extends Activity {
                 titleTextview = (TextView)convertView.findViewById(R.id.search_list_title);
                 tagsTextview = (TextView)convertView.findViewById(R.id.search_list_tags);
             }
-            getItem(position);
+
             yearTextview.setText(getItem(position).getDate().substring(0, 4)+"년");
             monthTextview.setText(getItem(position).getDate().substring(4, 6)+"월");
             dayTextview.setText(getItem(position).getDate().substring(6)+"일");
