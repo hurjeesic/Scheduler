@@ -63,6 +63,11 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                             String dateStr = disposeText.substring(instructionIndex + 1, dateIndex - 1);
                             String[] data = new String[]{ disposeText.substring(dateIndex), "", "" };
 
+                            if (manager.checkFile(dateStr))
+                            {
+                                Toast.makeText(getApplicationContext(), "해당 날짜 스케줄이 존재합니다.", Toast.LENGTH_LONG).show();
+                            }
+
                             manager.writeData(dateStr, data, true);
                         }
                         else {

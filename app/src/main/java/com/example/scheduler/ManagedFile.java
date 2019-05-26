@@ -27,6 +27,25 @@ public class ManagedFile {
         }
     }
 
+    public boolean checkFile(String date)
+    {
+        File f;
+        boolean result = false;
+
+        try {
+            f = new File(FILE_PATH + File.separator + date + ".txt");
+
+            if (f.exists()) {
+                result = true;
+            }
+        }
+        catch (Exception e) {
+            Log.e("예외", "알 수 없는 예외");
+        }
+
+        return result;
+    }
+
     private boolean checkDate(String date) {
         if (date == null || date.length() != 8) {
             return false;
