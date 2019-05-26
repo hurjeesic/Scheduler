@@ -73,7 +73,12 @@
                 android:id="@+id/schedule_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                ></ListView>
+                android:layout_above="@+id/search_progressbar" />
         </LinearLayout>
+        <ProgressBar
+            android:id="@+id/search_progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
     </LinearLayout>
 </LinearLayout>
