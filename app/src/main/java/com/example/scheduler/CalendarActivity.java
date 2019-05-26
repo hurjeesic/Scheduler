@@ -273,7 +273,7 @@ public class CalendarActivity extends Activity {
                         @Override
                         public void onClick(View v) {
                             String[] yearAry = { "year", Integer.toString(year) };
-                            String[] monthAry = { "month", month < 10 ? "0" + month : Integer.toString(month) };
+                            String[] monthAry = { "month", month + 1 < 10 ? "0" + (month + 1) : Integer.toString(month + 1) };
                             String[] dayAry = { "day", day < 10 ? "0" + day : Integer.toString(day) };
                             ManagedActivity.getInstance().moveActivity(CalendarActivity.this, DayScheduleActivity.class, yearAry, monthAry, dayAry);
                         }

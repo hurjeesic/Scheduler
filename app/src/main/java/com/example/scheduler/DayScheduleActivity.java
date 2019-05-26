@@ -111,8 +111,10 @@ public class DayScheduleActivity extends Activity {
                 tagsTextview = (TextView)convertView.findViewById(R.id.search_list_tags);
             }
 
+            int month = Integer.parseInt(getItem(position).getDate().substring(4, 6));
+
             yearTextview.setText(getItem(position).getDate().substring(0, 4)+"년");
-            monthTextview.setText(getItem(position).getDate().substring(4, 6)+"월");
+            monthTextview.setText(month+"월");
             dayTextview.setText(getItem(position).getDate().substring(6)+"일");
             indexTextview.setText(getItem(position).getIndex());
             titleTextview.setText(getItem(position).getTitle());
