@@ -255,6 +255,8 @@ public class CalendarActivity extends Activity {
             todayCal.setTimeInMillis(System.currentTimeMillis());
             Integer today = todayCal.get(Calendar.DAY_OF_MONTH);
             String sToday = String.valueOf(today);
+
+            // 날씨 확인
             if (weathers.size() != 0) {
                 String dateStr = weathers.get(0)[0];
                 if (getItem(position).equals(Integer.toString(Integer.parseInt(dateStr.substring(6, 8))))) {
@@ -262,20 +264,24 @@ public class CalendarActivity extends Activity {
                 }
             }
 
+            // 오늘인지 확인
             if (todayCal.get(Calendar.YEAR) == mCal.get(Calendar.YEAR) &&  todayCal.get(Calendar.MONTH) == mCal.get(Calendar.MONTH) &&
                 sToday.equals(getItem(position))) { //오늘 day 텍스트 컬러 변경
                 holder.tvItemGridView.setTextColor(getResources().getColor(R.color.black));
                 holder.tvItemGridView.setText(Html.fromHtml("<b>" + holder.tvItemGridView.getText() + "</b>"));
             }
 
+            // 주말 확인
             switch (position % 7) {
                 case 0: holder.tvItemGridView.setTextColor(getResources().getColor(R.color.sunday)); break;
                 case 6:  holder.tvItemGridView.setTextColor(getResources().getColor(R.color.saturday)); break;
                 default: holder.tvItemGridView.setTextColor(getResources().getColor(R.color.weekday));
             }
 
+            // 스케줄이 존재하는지 확인
             final int day = getItem(position) == "" ? 0 : Integer.parseInt(getItem(position));
-            if (0 < day && day<= mCal.getActualMaximum(Calendar.DAY_OF_MONTH) && bSchedule[day - 1]) {
+            if (todayCal.get(Calendar.YEAR) == mCal.get(Calendar.YEAR) &&  todayCal.get(Calendar.MONTH) == mCal.get(Calendar.MONTH) &&
+                0 < day && day<= mCal.getActualMaximum(Calendar.DAY_OF_MONTH) && bSchedule[day - 1]) {
                 holder.tvItemGridView.setBackgroundColor(getResources().getColor(R.color.Mint));
                 holder.tvItemGridView2.setBackgroundColor(getResources().getColor(R.color.Mint));
 
