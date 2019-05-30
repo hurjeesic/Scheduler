@@ -226,6 +226,7 @@ public class CalendarActivity extends Activity {
                 convertView = inflater.inflate(R.layout.item_calendar_gridview, parent, false);
                 holder = new ViewHolder();
                 holder.tvItemGridView = (TextView)convertView.findViewById(R.id.tv_item_gridview);
+                holder.tvItemGridView2 = (TextView)convertView.findViewById(R.id.tv_item_weather);
                 convertView.setTag(holder);
             }
             else {
@@ -244,7 +245,7 @@ public class CalendarActivity extends Activity {
                 if (year == Integer.parseInt(dateStr.substring(0, 4)) &&
                     month == Integer.parseInt(dateStr.substring(4, 6)) - 1 &&
                     getItem(position).equals(Integer.toString(Integer.parseInt(dateStr.substring(6, 8))))) {
-                    holder.tvItemGridView.setText(Html.fromHtml("<font size=1>" + holder.tvItemGridView.getText() + "\n" + weathers.remove(0)[1]) + "</font>");
+                    holder.tvItemGridView2.setText(Html.fromHtml( holder.tvItemGridView.getText() + "\n" + weathers.remove(0)[1]));
                 }
             }
 
@@ -262,7 +263,8 @@ public class CalendarActivity extends Activity {
 
             final int day = getItem(position) == "" ? 0 : Integer.parseInt(getItem(position));
             if (0 < day && day<= mCal.getActualMaximum(Calendar.DAY_OF_MONTH) && bSchedule[day - 1]) {
-                holder.tvItemGridView.setBackgroundColor(getResources().getColor(R.color.schedule));
+                holder.tvItemGridView.setBackgroundColor(getResources().getColor(R.color.Mint));
+                holder.tvItemGridView2.setBackgroundColor(getResources().getColor(R.color.Mint));
 
                 convertView.findViewById(R.id.tv_item_gridview).setOnClickListener(
                     new View.OnClickListener() {
@@ -275,6 +277,18 @@ public class CalendarActivity extends Activity {
                         }
                     }
                 );
+
+                convertView.findViewById(R.id.tv_item_weather).setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String[] yearAry = { "year", Integer.toString(year) };
+                                String[] monthAry = { "month", month + 1 < 10 ? "0" + (month + 1) : Integer.toString(month + 1) };
+                                String[] dayAry = { "day", day < 10 ? "0" + day : Integer.toString(day) };
+                                ManagedActivity.getInstance().moveActivity(CalendarActivity.this, DayScheduleActivity.class, yearAry, monthAry, dayAry);
+                            }
+                        }
+                );
             }
 
             return convertView;
@@ -283,6 +297,7 @@ public class CalendarActivity extends Activity {
 
     private class ViewHolder {
         TextView tvItemGridView;
+        TextView tvItemGridView2;
     }
 
     // 네이버 날씨
