@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +17,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+import java.util.TimeZone;
 
 // Grid View를 이용한 달력 제작
 // https://heum-story.tistory.com/6
@@ -43,6 +41,10 @@ public class CalendarActivity extends Activity {
     boolean[] bSchedule;
     ArrayList<String[]> weathers;
 
+    // TimeZone 확인 방법
+    // https://blog.naver.com/asap0628/220721051171
+    TimeZone koreaTime = TimeZone.getTimeZone("Asia/Seoul");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,14 +57,14 @@ public class CalendarActivity extends Activity {
         dayList = new ArrayList<>();
 
         // 오늘에 날짜를 세팅 해준다.
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(koreaTime);
 
-        mCal = Calendar.getInstance();
+        mCal = Calendar.getInstance(koreaTime);
 
         //이번달 1일 무슨요일인지 판단 mCal.set(Year,Month,Day)
-        year = Integer.parseInt(new SimpleDateFormat("yyyy", Locale.KOREA).format(cal.getTime()));
-        month = Integer.parseInt(new SimpleDateFormat("MM", Locale.KOREA).format(cal.getTime())) - 1;
-        mCal.set(year, month, Integer.parseInt(new SimpleDateFormat("dd", Locale.KOREA).format(cal.getTime())));
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        mCal.set(year, month, cal.get(Calendar.DATE));
 
         resetCalendar();
 
@@ -170,8 +172,11 @@ public class CalendarActivity extends Activity {
         try {
             String weathersStr = weathers.get();
             String[] weathersStrAry = weathersStr.split("\r");
-            Calendar today = Calendar.getInstance();
-            for (int i = 0; i < weathersStrAry.length; i++) {
+            Calendar today = Calendar.getInstance(koreaTime);
+
+            // 오전 오후 확인 방법
+            // http://myroid.blogspot.com/2011/10/blog-post_2067.html
+            for (int i = today.get(Calendar.AM_PM) == Calendar.AM ? 0 : 1; i < weathersStrAry.length; i += 2) {
                 int year, month, day;
                 String[] tempAry = new String[2];
                 year = today.get(Calendar.YEAR);
@@ -179,6 +184,9 @@ public class CalendarActivity extends Activity {
                 day = today.get(Calendar.DATE);
                 tempAry[0] = year + (month < 10 ? "0" + month : Integer.toString(month)) + (day < 10 ? "0" + day : Integer.toString(day));
                 tempAry[1]  = weathersStrAry[i];
+                if (i == 0) {
+                    i++;
+                }
 
                 this.weathers.add(tempAry);
                 today.set(Calendar.DATE, day + 1);
@@ -243,13 +251,12 @@ public class CalendarActivity extends Activity {
             //해당 날짜 텍스트 컬러,배경 변경
 
             //오늘 day 가져옴
-            Calendar todayCal = Calendar.getInstance();
+            Calendar todayCal = Calendar.getInstance(koreaTime);
             todayCal.setTimeInMillis(System.currentTimeMillis());
             Integer today = todayCal.get(Calendar.DAY_OF_MONTH);
             String sToday = String.valueOf(today);
             if (weathers.size() != 0) {
                 String dateStr = weathers.get(0)[0];
-                Log.d("Information", dateStr);
                 if (getItem(position).equals(Integer.toString(Integer.parseInt(dateStr.substring(6, 8))))) {
                     holder.tvItemGridView2.setText(Html.fromHtml(weathers.remove(0)[1]));
                 }
@@ -325,7 +332,7 @@ public class CalendarActivity extends Activity {
                 ArrayList<String> temperaturesStr = new ArrayList<>(temperatures.eachText());
                 ArrayList<String> weathersStr = new ArrayList<>(weathers.eachText());
                 String result = "";
-                for (int i = 0; i < weathers.size(); i += 2) {
+                for (int i = 0; i < weathers.size(); i++) {
                     String temperatureStr = temperaturesStr.get(i).substring(2, 5);
                     String weatherStr = weathersStr.get(i).split("\n")[0];
                     if (weatherStr.indexOf("강수") != -1) {
