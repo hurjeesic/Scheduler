@@ -190,7 +190,6 @@
                     android:id="@+id/gridview"
                     android:layout_width="match_parent"
                     android:layout_height="490dp"
-                    android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:listSelector="#a2a2ff"
                     android:numColumns="7"></GridView>
