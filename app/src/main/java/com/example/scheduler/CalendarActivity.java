@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -182,6 +183,12 @@ public class CalendarActivity extends Activity {
                 this.weathers.add(tempAry);
                 today.set(Calendar.DATE, day + 1);
             }
+
+            for (int i = 0; i < this.weathers.size(); i++) {
+                if (Integer.parseInt(this.weathers.get(i)[0].substring(0, 4)) != year || Integer.parseInt(this.weathers.get(i)[0].substring(4, 6)) != month + 1) {
+                    this.weathers.remove(i--);
+                }
+            }
         }
         catch (Exception e) {
 
@@ -242,10 +249,9 @@ public class CalendarActivity extends Activity {
             String sToday = String.valueOf(today);
             if (weathers.size() != 0) {
                 String dateStr = weathers.get(0)[0];
-                if (year == Integer.parseInt(dateStr.substring(0, 4)) &&
-                    month == Integer.parseInt(dateStr.substring(4, 6)) - 1 &&
-                    getItem(position).equals(Integer.toString(Integer.parseInt(dateStr.substring(6, 8))))) {
-                    holder.tvItemGridView2.setText(Html.fromHtml( holder.tvItemGridView.getText() + "\n" + weathers.remove(0)[1]));
+                Log.d("Information", dateStr);
+                if (getItem(position).equals(Integer.toString(Integer.parseInt(dateStr.substring(6, 8))))) {
+                    holder.tvItemGridView2.setText(Html.fromHtml(weathers.remove(0)[1]));
                 }
             }
 
@@ -313,14 +319,19 @@ public class CalendarActivity extends Activity {
                 String path = "https://weather.naver.com/rgn/townWetr.nhn?naverRgnCd=14110630";
                 Document document = Jsoup.connect(path).get();
                 //Elements elements = document.select(".nm");
-                Elements temperatures = document.select(".nm");
                 Elements weathers = document.select(".info");
+                Elements temperatures = document.select(".nm");
 
                 ArrayList<String> temperaturesStr = new ArrayList<>(temperatures.eachText());
                 ArrayList<String> weathersStr = new ArrayList<>(weathers.eachText());
                 String result = "";
                 for (int i = 0; i < weathers.size(); i += 2) {
-                    result += temperaturesStr.get(i).substring(2, 7) + "\n" + weathersStr.get(i).split("\n")[0] + "\r";
+                    String temperatureStr = temperaturesStr.get(i).substring(2, 5);
+                    String weatherStr = weathersStr.get(i).split("\n")[0];
+                    if (weatherStr.indexOf("강수") != -1) {
+                        weatherStr = weatherStr.substring(0, weatherStr.indexOf("강수"));
+                    }
+                    result += temperatureStr + "℃<br>" + weatherStr + "\r";
                 }
 
                 return result;
